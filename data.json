@@ -1,14 +1,6 @@
 {
   "version": 1,
-  "purchases": [
-    {
-      "id": "mvayob1am7acq",
-      "desc": "Şu iki şey",
-      "amount": 87000,
-      "payer": "Efe",
-      "date": "2026-10-16T12:46:05.278Z"
-    }
-  ],
+  "purchases": [],
   "payments": [],
   "rules": [
     {
