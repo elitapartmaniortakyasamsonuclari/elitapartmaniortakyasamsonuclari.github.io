@@ -28,7 +28,15 @@
       ]
     }
   ],
-  "payments": [],
+  "payments": [
+    {
+      "id": "mvbe7q96e448a",
+      "from": "Alper",
+      "to": "Yekta",
+      "amount": 21750,
+      "date": "2026-10-16T20:01:05.706Z"
+    }
+  ],
   "rules": [
     {
       "id": "mvbcxs5xeonyd",
