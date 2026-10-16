@@ -44,6 +44,13 @@
       "to": "Alper",
       "amount": 5875,
       "date": "2026-10-16T12:39:46.979Z"
+    },
+    {
+      "id": "mvayg9q8sqvs0",
+      "from": "Efe",
+      "to": "Furkan",
+      "amount": 2375,
+      "date": "2026-10-16T12:39:50.336Z"
     }
   ],
   "rules": [
