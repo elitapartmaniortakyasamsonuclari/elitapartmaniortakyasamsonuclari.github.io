@@ -136,7 +136,8 @@
     {
       "id": "mutfak",
       "name": "Mutfak",
-      "icon": "🍳"
+      "icon": "🍳",
+      "shift": 3
     },
     {
       "id": "banyo",
