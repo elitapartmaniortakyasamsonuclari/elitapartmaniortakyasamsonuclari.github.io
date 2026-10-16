@@ -165,7 +165,15 @@
     }
   ],
   "ledger": [],
-  "choreLog": [],
+  "choreLog": [
+    {
+      "id": "mvbe3xgjtpclh",
+      "task": "mutfak",
+      "week": 0,
+      "by": "Alper",
+      "date": "2026-10-16T19:58:08.419Z"
+    }
+  ],
   "chores": [
     {
       "id": "mutfak",
