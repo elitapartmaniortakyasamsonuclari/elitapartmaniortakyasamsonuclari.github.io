@@ -14,6 +14,13 @@
       "amount": 20000,
       "payer": "Yekta",
       "date": "2026-10-16T12:38:40.176Z"
+    },
+    {
+      "id": "mvayf277lutn4",
+      "desc": "Çük",
+      "amount": 5000,
+      "payer": "Yekta",
+      "date": "2026-10-16T12:38:53.923Z"
     }
   ],
   "payments": [],
