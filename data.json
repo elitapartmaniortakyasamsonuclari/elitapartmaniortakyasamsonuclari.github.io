@@ -1,77 +1,7 @@
 {
   "version": 1,
-  "purchases": [
-    {
-      "id": "mvb0wyxb66q1g",
-      "desc": "İki şey",
-      "amount": 87000,
-      "payer": "Yekta",
-      "date": "2026-10-16T13:48:48.719Z"
-    },
-    {
-      "id": "mvb0x7ood9ol0",
-      "desc": "Kağıt havlu çöp",
-      "amount": 80000,
-      "payer": "Furkan",
-      "date": "2026-10-16T13:49:00.072Z"
-    },
-    {
-      "id": "mvb28yerfml7o",
-      "desc": "Havlu kağıt sandığım tuvalet kağıdı",
-      "amount": 26000,
-      "payer": "Efe",
-      "date": "2026-10-16T14:26:07.539Z"
-    },
-    {
-      "id": "mvbe5myswcsqb",
-      "desc": "Filtre Kahve 2 tane (indirimdeydi)",
-      "amount": 45000,
-      "payer": "Efe",
-      "date": "2026-10-16T19:59:28.132Z",
-      "split": [
-        "Efe",
-        "Furkan",
-        "Yekta"
-      ]
-    }
-  ],
-  "payments": [
-    {
-      "id": "mvb14hgo74ytm",
-      "from": "Furkan",
-      "to": "Yekta",
-      "amount": 1750,
-      "date": "2026-10-16T13:54:39.336Z"
-    },
-    {
-      "id": "mvb14ktjiddck",
-      "from": "Alper",
-      "to": "Yekta",
-      "amount": 21750,
-      "date": "2026-10-16T13:54:43.687Z"
-    },
-    {
-      "id": "mvbe5lu6jonr3",
-      "from": "Alper",
-      "to": "Furkan",
-      "amount": 20000,
-      "date": "2026-10-16T19:59:26.670Z"
-    },
-    {
-      "id": "mvbe5v8k53per",
-      "from": "Alper",
-      "to": "Efe",
-      "amount": 6500,
-      "date": "2026-10-16T19:59:38.852Z"
-    },
-    {
-      "id": "mvbe5zkwreq18",
-      "from": "Efe",
-      "to": "Yekta",
-      "amount": 250,
-      "date": "2026-10-16T19:59:44.480Z"
-    }
-  ],
+  "purchases": [],
+  "payments": [],
   "rules": [
     {
       "id": "mvbcxs5xeonyd",
@@ -107,6 +37,13 @@
     }
   ],
   "history": [
+    {
+      "id": "mvbe61rtaqq12",
+      "closedAt": "2026-10-16T19:59:47.321Z",
+      "total": 238000,
+      "per": 59500,
+      "count": 4
+    },
     {
       "id": "mvb0wq57odbm6",
       "closedAt": "2026-10-16T13:48:37.339Z",
@@ -169,7 +106,37 @@
       "date": "2026-11-07"
     }
   ],
-  "ledger": [],
+  "ledger": [
+    {
+      "desc": "İki şey",
+      "amount": 87000,
+      "payer": "Yekta",
+      "date": "2026-10-16T13:48:48.719Z"
+    },
+    {
+      "desc": "Kağıt havlu çöp",
+      "amount": 80000,
+      "payer": "Furkan",
+      "date": "2026-10-16T13:49:00.072Z"
+    },
+    {
+      "desc": "Havlu kağıt sandığım tuvalet kağıdı",
+      "amount": 26000,
+      "payer": "Efe",
+      "date": "2026-10-16T14:26:07.539Z"
+    },
+    {
+      "desc": "Filtre Kahve 2 tane (indirimdeydi)",
+      "amount": 45000,
+      "payer": "Efe",
+      "split": [
+        "Efe",
+        "Furkan",
+        "Yekta"
+      ],
+      "date": "2026-10-16T19:59:28.132Z"
+    }
+  ],
   "choreLog": [
     {
       "id": "mvbe3xgjtpclh",
