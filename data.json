@@ -21,6 +21,13 @@
       "amount": 5000,
       "payer": "Yekta",
       "date": "2026-10-16T12:38:53.923Z"
+    },
+    {
+      "id": "mvayfa3727tfc",
+      "desc": "Araba",
+      "amount": 24000,
+      "payer": "Furkan",
+      "date": "2026-10-16T12:39:04.148Z"
     }
   ],
   "payments": [],
