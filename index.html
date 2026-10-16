@@ -3,6 +3,9 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#d9572b">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Ev Hesabı">
 <title>Ev Hesabı</title>
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🏠</text></svg>">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -11,7 +14,8 @@
 :root{
   --bg:#f5f1ea; --card:#ffffff; --ink:#1f1c18; --muted:#6f685e; --line:#e8e1d5;
   --accent:#d9572b; --accent-ink:#fff; --accent-soft:#fbe9e1;
-  --ok:#23867a; --ok-soft:#dff1ee; --bad:#c2412d; --bad-soft:#fae3de;
+  --ok:#23867a; --ok-soft:#dff1ee; --bad:#c2412d; --bad-soft:#fae3de; --warn:#b26b00; --warn-soft:#fdf0d6;
+  --info:#3d5fa8; --info-soft:#e5ecfa;
   --shadow:0 1px 2px rgba(0,0,0,.04),0 6px 20px rgba(60,40,20,.06);
   --radius:16px;
 }
@@ -19,7 +23,8 @@
   :root{
     --bg:#151412; --card:#1f1d1a; --ink:#f2ede5; --muted:#a59e93; --line:#332f29;
     --accent:#ee7447; --accent-soft:#3a251c; --ok:#4cc1b1; --ok-soft:#173330;
-    --bad:#ef7a66; --bad-soft:#3a1f1a; --shadow:none;
+    --bad:#ef7a66; --bad-soft:#3a1f1a; --warn:#f0b04a; --warn-soft:#3a2d14;
+    --info:#8fb0f0; --info-soft:#1d2840; --shadow:none;
   }
 }
 *{box-sizing:border-box}
@@ -30,7 +35,7 @@ button,input,select,textarea{font:inherit;color:inherit}
 
 /* header */
 header{position:sticky;top:0;z-index:5;background:color-mix(in srgb,var(--bg) 88%,transparent);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
-.bar{max-width:760px;margin:0 auto;padding:12px 16px;display:flex;align-items:center;gap:10px}
+.bar{max-width:760px;margin:0 auto;padding:12px 16px 8px;display:flex;align-items:center;gap:10px}
 .brand{flex:1;min-width:0}
 .brand h1{margin:0;font-size:20px;font-weight:700;letter-spacing:-.01em}
 .brand small{display:block;color:var(--muted);font-size:13px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
@@ -43,23 +48,29 @@ header{position:sticky;top:0;z-index:5;background:color-mix(in srgb,var(--bg) 88
 .sync.err{background:var(--bad)}
 @keyframes pulse{50%{opacity:.35}}
 
-/* tabs */
-nav.tabs{display:flex;gap:6px;margin:16px 0;background:var(--card);border:1px solid var(--line);border-radius:14px;padding:4px}
-nav.tabs button{flex:1;border:0;background:none;padding:10px 6px;border-radius:10px;font-weight:600;font-size:15px;cursor:pointer;color:var(--muted);display:flex;align-items:center;justify-content:center;gap:6px}
-nav.tabs button.on{background:var(--accent);color:var(--accent-ink)}
-.badge{background:var(--bad);color:#fff;border-radius:999px;font-size:11px;padding:1px 7px;line-height:16px}
+/* tabs: yatay kaydırılabilir */
+nav.tabs{max-width:760px;margin:0 auto;display:flex;gap:6px;padding:4px 16px 10px;overflow-x:auto;scrollbar-width:none;-webkit-overflow-scrolling:touch}
+nav.tabs::-webkit-scrollbar{display:none}
+nav.tabs button{flex:none;border:1px solid var(--line);background:var(--card);padding:8px 12px;border-radius:999px;font-weight:600;font-size:14px;cursor:pointer;color:var(--muted);display:flex;align-items:center;gap:6px;white-space:nowrap}
+nav.tabs button.on{background:var(--accent);border-color:var(--accent);color:var(--accent-ink)}
+.badge{background:var(--bad);color:#fff;border-radius:999px;font-size:11px;padding:0 6px;line-height:17px;min-width:17px;text-align:center}
 nav.tabs button.on .badge{background:#fff;color:var(--accent)}
 
 .banner{margin:12px 0 0;padding:10px 14px;border-radius:12px;background:var(--accent-soft);font-size:14px}
 .banner button{border:0;background:none;color:var(--accent);font-weight:600;cursor:pointer;padding:0;text-decoration:underline}
+.exam-banner{margin:12px 0 0;padding:12px 14px;border-radius:12px;background:var(--info-soft);color:var(--info);font-size:14px;font-weight:500}
+.exam-banner b{font-weight:700}
 
+section{padding-top:14px}
 .card{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow);padding:16px;margin-bottom:14px}
-.card h2{margin:0 0 12px;font-size:17px;font-weight:600}
+.card h2{margin:0 0 12px;font-size:17px;font-weight:600;display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.card h2 .sp{flex:1}
 .muted{color:var(--muted)}
+.hint{color:var(--muted);margin:-6px 0 12px;font-size:14px}
 .empty{color:var(--muted);text-align:center;padding:18px 8px;font-size:15px}
 
 /* summary */
-.summary{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.summary{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px}
 .stat{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:14px 16px;box-shadow:var(--shadow)}
 .stat span{display:block;font-size:13px;color:var(--muted)}
 .stat b{display:block;font-size:24px;font-weight:700;letter-spacing:-.02em;margin-top:2px;font-variant-numeric:tabular-nums}
@@ -68,17 +79,25 @@ nav.tabs button.on .badge{background:#fff;color:var(--accent)}
 
 /* form */
 .form{display:grid;grid-template-columns:1fr 130px;gap:10px}
+.form.three{grid-template-columns:1fr 1fr}
 .form .full{grid-column:1/-1}
 label.f{display:block;font-size:13px;color:var(--muted);margin-bottom:4px;font-weight:500}
-input[type=text],input[type=password],select,textarea{width:100%;padding:11px 12px;border:1px solid var(--line);border-radius:11px;background:var(--bg);outline:none;font-size:16px}
+input[type=text],input[type=password],input[type=date],input[type=number],select,textarea{width:100%;padding:11px 12px;border:1px solid var(--line);border-radius:11px;background:var(--bg);outline:none;font-size:16px;min-height:46px}
 input:focus,select:focus,textarea:focus{border-color:var(--accent);box-shadow:0 0 0 3px var(--accent-soft)}
 .payers{display:grid;grid-template-columns:repeat(4,1fr);gap:6px}
 .payers button{border:1px solid var(--line);background:var(--bg);border-radius:11px;padding:8px 4px;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:4px;font-size:13px;font-weight:600}
 .payers button.on{border-color:var(--accent);background:var(--accent-soft)}
+.chips{display:flex;flex-wrap:wrap;gap:6px}
+.chip{border:1px solid var(--line);background:var(--bg);border-radius:999px;padding:5px 12px 5px 5px;cursor:pointer;display:inline-flex;align-items:center;gap:6px;font-size:14px;font-weight:600;color:var(--muted)}
+.chip .av{width:24px;height:24px;font-size:12px;opacity:.45}
+.chip.on{border-color:var(--ok);background:var(--ok-soft);color:var(--ink)}
+.chip.on .av{opacity:1}
+.split-info{font-size:13px;color:var(--muted);margin-top:6px}
 .actions{display:flex;gap:8px;margin-top:2px}
-.btn{border:0;border-radius:11px;padding:11px 16px;font-weight:600;cursor:pointer;background:var(--accent);color:var(--accent-ink)}
+.btn{border:0;border-radius:11px;padding:11px 16px;font-weight:600;cursor:pointer;background:var(--accent);color:var(--accent-ink);white-space:nowrap}
 .btn.ghost{background:transparent;border:1px solid var(--line);color:var(--ink)}
 .btn.ok{background:var(--ok);color:#fff}
+.btn.wa{background:#25d366;color:#08331a}
 .btn.sm{padding:7px 12px;font-size:14px;border-radius:9px}
 .btn:disabled{opacity:.5;cursor:default}
 .grow{flex:1}
@@ -86,6 +105,7 @@ input:focus,select:focus,textarea:focus{border-color:var(--accent);box-shadow:0 
 /* avatar */
 .av{width:30px;height:30px;border-radius:50%;display:inline-grid;place-items:center;font-weight:700;font-size:14px;color:#fff;flex:none}
 .av.lg{width:40px;height:40px;font-size:17px}
+.av.sm{width:22px;height:22px;font-size:11px}
 
 /* lists */
 ul.list{list-style:none;margin:0;padding:0}
@@ -93,10 +113,22 @@ ul.list li{display:flex;align-items:center;gap:12px;padding:11px 0;border-top:1p
 ul.list li:first-child{border-top:0}
 .li-main{flex:1;min-width:0}
 .li-main b{display:block;font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.li-main b.brk{white-space:normal;word-break:break-word}
+.li-main .tag{white-space:normal;line-height:1.35}
 .li-main small{color:var(--muted);font-size:13px}
 .amt{font-weight:700;font-variant-numeric:tabular-nums;white-space:nowrap}
-.mini{border:0;background:none;cursor:pointer;font-size:16px;padding:6px;border-radius:8px;color:var(--muted)}
+.mini{border:0;background:none;cursor:pointer;font-size:16px;padding:6px;border-radius:8px;color:var(--muted);flex:none}
 .mini:hover{background:var(--bg)}
+.ic{font-size:22px;width:30px;text-align:center;flex:none}
+
+/* alerts */
+.alert{cursor:pointer}
+.alert .li-main b{white-space:normal}
+.tag{display:inline-block;font-size:12px;font-weight:700;padding:2px 8px;border-radius:999px;white-space:nowrap}
+.tag.bad{background:var(--bad-soft);color:var(--bad)}
+.tag.warn{background:var(--warn-soft);color:var(--warn)}
+.tag.ok{background:var(--ok-soft);color:var(--ok)}
+.tag.muted{background:var(--line);color:var(--muted)}
 
 /* people */
 .people{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
@@ -114,6 +146,37 @@ ul.list li:first-child{border-top:0}
 .tr .arrow{color:var(--muted)}
 .tr .amt{font-size:18px}
 .done{text-align:center;padding:18px;font-size:18px;font-weight:600;color:var(--ok)}
+
+/* me card */
+.me-card{display:flex;gap:12px;align-items:flex-start}
+.me-card .li-main b{white-space:normal}
+.me-lines{margin:6px 0 0;padding:0;list-style:none;font-size:15px}
+.me-lines li{padding:2px 0}
+
+/* chores */
+.chore{border:1px solid var(--line);border-radius:14px;padding:12px;margin-bottom:8px;background:var(--bg)}
+.chore.me{border-color:var(--accent)}
+.chore.isdone{opacity:.85}
+.chore-top{display:flex;align-items:center;gap:10px}
+.chore-top .nm{font-weight:600;flex:1;min-width:0}
+.chore-mid{display:flex;align-items:center;gap:8px;margin-top:10px;flex-wrap:wrap}
+.chore-mid select{width:auto;min-height:36px;padding:5px 10px;font-size:15px;font-weight:600;border-radius:9px;background:var(--card)}
+.chore-mid .grow{min-width:8px}
+.chore small{color:var(--muted);font-size:13px}
+
+/* bars */
+.barrow{display:grid;grid-template-columns:70px 1fr auto;gap:10px;align-items:center;padding:6px 0;font-size:14px}
+.barrow .track{height:10px;background:var(--line);border-radius:999px;overflow:hidden}
+.barrow .fill{height:100%;border-radius:999px}
+.barrow .v{font-weight:600;font-variant-numeric:tabular-nums;white-space:nowrap}
+.month-nav{display:flex;align-items:center;gap:6px}
+.month-nav button{border:1px solid var(--line);background:var(--bg);width:32px;height:32px;border-radius:9px;cursor:pointer;font-size:16px}
+.month-nav button:disabled{opacity:.35;cursor:default}
+.split3{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:14px}
+.split3 div{background:var(--bg);border:1px solid var(--line);border-radius:12px;padding:10px}
+.split3 span{display:block;font-size:12px;color:var(--muted)}
+.split3 b{font-size:17px;font-variant-numeric:tabular-nums}
+h3.sub{font-size:14px;color:var(--muted);font-weight:600;margin:14px 0 4px;text-transform:uppercase;letter-spacing:.04em}
 
 /* rules */
 ol.rules{margin:0;padding:0;list-style:none;counter-reset:r}
@@ -141,10 +204,11 @@ dialog::backdrop{background:rgba(0,0,0,.45)}
 [hidden]{display:none!important}
 @media (max-width:480px){
   .form{grid-template-columns:1fr 110px}
-  .people{grid-template-columns:1fr 1fr}
   .stat b{font-size:21px}
   .brand h1{font-size:18px}
   .dlg .grid2{grid-template-columns:1fr}
+  nav.tabs button{font-size:13px;padding:7px 11px}
+  .split3 b{font-size:15px}
 }
 </style>
 </head>
@@ -163,26 +227,58 @@ dialog::backdrop{background:rgba(0,0,0,.45)}
     </div>
     <button class="icon-btn" id="openSettings" aria-label="Settings">⚙︎</button>
   </div>
+  <nav class="tabs" id="tabs"></nav>
 </header>
 
 <div class="wrap">
   <div class="banner" id="banner" hidden></div>
+  <div class="exam-banner" id="examBanner" hidden></div>
 
-  <nav class="tabs">
-    <button data-tab="shop" data-i18n="tabShop">Alışverişler</button>
-    <button data-tab="settle"><span data-i18n="tabSettle">Hesaplaşma</span><span class="badge" id="settleBadge" hidden></span></button>
-    <button data-tab="rules" data-i18n="tabRules">Ev Kuralları</button>
-  </nav>
+  <!-- HOME -->
+  <section id="tab-home" hidden>
+    <div class="card" id="meCard"></div>
+    <div class="card">
+      <h2 data-i18n="upcoming">Yaklaşanlar</h2>
+      <ul class="list" id="alerts"></ul>
+    </div>
+    <div class="card">
+      <h2 data-i18n="notesTitle">Duyuru panosu</h2>
+      <form id="noteForm" class="row" autocomplete="off" style="margin-bottom:6px">
+        <input type="text" id="noteText" data-i18n-ph="notePh" maxlength="200">
+        <button class="btn" type="submit" data-i18n="post">Paylaş</button>
+      </form>
+      <ul class="list" id="noteList"></ul>
+    </div>
+    <div class="card">
+      <h2 data-i18n="examsTitle">Sınavlar ve teslimler</h2>
+      <p class="hint" data-i18n="examsHint"></p>
+      <form id="examForm" class="form three" autocomplete="off">
+        <div>
+          <label class="f" for="examWho" data-i18n="examWho">Kimin?</label>
+          <select id="examWho"></select>
+        </div>
+        <div>
+          <label class="f" for="examDate" data-i18n="examDate">Tarih</label>
+          <input type="date" id="examDate">
+        </div>
+        <div class="full">
+          <label class="f" for="examName" data-i18n="examName">Ders / sınav</label>
+          <input type="text" id="examName" data-i18n-ph="examPh" maxlength="60">
+        </div>
+        <div class="full actions"><button class="btn grow" type="submit" data-i18n="add">Ekle</button></div>
+      </form>
+      <ul class="list" id="examList" style="margin-top:8px"></ul>
+    </div>
+  </section>
 
   <!-- SHOP -->
-  <section id="tab-shop">
-    <div class="summary" style="margin-bottom:14px">
+  <section id="tab-shop" hidden>
+    <div class="summary">
       <div class="stat"><span data-i18n="total">Toplam</span><b id="sTotal">–</b></div>
-      <div class="stat hl"><span data-i18n="perPerson">Kişi başı</span><b id="sPer">–</b></div>
+      <div class="stat hl"><span id="sPerLabel">Kişi başı</span><b id="sPer">–</b></div>
     </div>
-
     <div class="card">
-      <h2 id="formTitle" data-i18n="addPurchase">Yeni alışveriş</h2>
+      <h2 id="formTitle">Yeni alışveriş</h2>
       <form id="pForm" class="form" autocomplete="off">
         <div>
           <label class="f" for="pDesc" data-i18n="desc">Ne alındı?</label>
@@ -196,13 +292,17 @@ dialog::backdrop{background:rgba(0,0,0,.45)}
           <label class="f" data-i18n="paidBy">Kim ödedi?</label>
           <div class="payers" id="payers"></div>
         </div>
+        <div class="full">
+          <label class="f" data-i18n="splitAmong">Kimler arasında bölünsün?</label>
+          <div class="chips" id="splitChips"></div>
+          <div class="split-info" id="splitInfo"></div>
+        </div>
         <div class="full actions">
-          <button class="btn grow" type="submit" id="pSubmit" data-i18n="add">Ekle</button>
+          <button class="btn grow" type="submit" id="pSubmit">Ekle</button>
           <button class="btn ghost" type="button" id="pCancel" data-i18n="cancel" hidden>Vazgeç</button>
         </div>
       </form>
     </div>
-
     <div class="card">
       <h2><span data-i18n="purchases">Bu dönemin alışverişleri</span> <span class="muted" id="pCount"></span></h2>
       <ul class="list" id="pList"></ul>
@@ -214,11 +314,12 @@ dialog::backdrop{background:rgba(0,0,0,.45)}
     <div class="card">
       <h2 data-i18n="transfers">Kim kime ne kadar gönderecek?</h2>
       <div id="transfers"></div>
+      <button class="btn wa" style="width:100%;margin-top:6px" id="waSettle" data-i18n="waShare">WhatsApp’ta paylaş</button>
     </div>
     <div class="card">
       <h2 data-i18n="recordPay">Ödeme kaydet</h2>
-      <p class="muted" style="margin:-6px 0 12px;font-size:14px" data-i18n="recordPayHint"></p>
-      <form id="payForm" class="form" autocomplete="off">
+      <p class="hint" data-i18n="recordPayHint"></p>
+      <form id="payForm" class="form three" autocomplete="off">
         <div>
           <label class="f" for="payFrom" data-i18n="payFrom">Kim gönderdi?</label>
           <select id="payFrom"></select>
@@ -231,9 +332,7 @@ dialog::backdrop{background:rgba(0,0,0,.45)}
           <label class="f" for="payAmt" data-i18n="amount">Tutar (₺)</label>
           <input type="text" id="payAmt" inputmode="decimal" placeholder="0,00">
         </div>
-        <div class="full actions">
-          <button class="btn ok grow" type="submit" data-i18n="recordBtn">Ödemeyi kaydet</button>
-        </div>
+        <div class="full actions"><button class="btn ok grow" type="submit" data-i18n="recordBtn">Ödemeyi kaydet</button></div>
       </form>
     </div>
     <div class="card">
@@ -244,16 +343,60 @@ dialog::backdrop{background:rgba(0,0,0,.45)}
       <h2 data-i18n="sentList">Gönderilenler</h2>
       <ul class="list" id="payList"></ul>
     </div>
+    <div class="card">
+      <h2><span data-i18n="statsTitle">Aylık özet</span><span class="sp"></span>
+        <span class="month-nav"><button id="mPrev" aria-label="prev">‹</button><span id="mLabel" style="font-size:15px;min-width:110px;text-align:center"></span><button id="mNext" aria-label="next">›</button></span>
+      </h2>
+      <div id="stats"></div>
+    </div>
     <div class="card" id="historyCard" hidden>
       <h2 data-i18n="history">Geçmiş dönemler</h2>
       <ul class="list" id="histList"></ul>
     </div>
   </section>
 
+  <!-- CHORES -->
+  <section id="tab-chores" hidden>
+    <div class="card">
+      <h2><span data-i18n="choresTitle">Bu haftanın nöbetleri</span> <span class="muted" id="weekLabel" style="font-weight:500"></span></h2>
+      <p class="hint" data-i18n="choresHint"></p>
+      <div id="choreList"></div>
+    </div>
+    <div class="card">
+      <h2 data-i18n="scoreTitle">Son 8 hafta</h2>
+      <div id="choreScore"></div>
+    </div>
+    <div class="card">
+      <h2 data-i18n="choreEdit">Görevleri düzenle</h2>
+      <ul class="list" id="choreTasks"></ul>
+      <form id="choreForm" class="row" autocomplete="off" style="margin-top:8px">
+        <input type="text" id="choreName" data-i18n-ph="chorePh" maxlength="40">
+        <button class="btn" type="submit" data-i18n="add">Ekle</button>
+      </form>
+    </div>
+  </section>
+
+  <!-- NEEDS -->
+  <section id="tab-needs" hidden>
+    <div class="card">
+      <h2 data-i18n="needsAdd">Eksik ekle</h2>
+      <form id="nForm" class="row" autocomplete="off">
+        <input type="text" id="nText" data-i18n-ph="needsPh" maxlength="80">
+        <button class="btn" type="submit" data-i18n="add">Ekle</button>
+      </form>
+    </div>
+    <div class="card">
+      <h2><span data-i18n="needsTitle">Alınacaklar</span> <span class="muted" id="nCount"></span></h2>
+      <p class="hint" data-i18n="needsHint"></p>
+      <ul class="list" id="nList"></ul>
+      <button class="btn wa" style="width:100%;margin-top:8px" id="waNeeds" data-i18n="waShare" hidden>WhatsApp’ta paylaş</button>
+    </div>
+  </section>
+
   <!-- RULES -->
   <section id="tab-rules" hidden>
     <div class="card">
-      <h2 data-i18n="tabRules">Ev Kuralları</h2>
+      <h2 data-i18n="rulesTitle">Ev Kuralları</h2>
       <ol class="rules" id="rList"></ol>
     </div>
     <div class="card">
@@ -281,7 +424,7 @@ dialog::backdrop{background:rgba(0,0,0,.45)}
       <p class="hint" id="houseHint"></p>
 
       <details style="margin-top:14px" id="setupBox">
-        <summary class="muted" style="cursor:pointer;font-size:14px" data-i18n="setupSection">Kurulum (sadece bir kişi yapar)</summary>
+        <summary class="muted" style="cursor:pointer;font-size:14px" data-i18n="setupSection">Kurulum</summary>
         <div style="margin-top:10px">
           <label class="f" for="sToken" data-i18n="token">Erişim anahtarı (token)</label>
           <input type="password" id="sToken" placeholder="github_pat_…" autocomplete="off" spellcheck="false">
@@ -312,10 +455,12 @@ dialog::backdrop{background:rgba(0,0,0,.45)}
 const PEOPLE = ['Efe', 'Furkan', 'Yekta', 'Alper'];
 const COLORS = { Efe:'#e2603a', Furkan:'#23867a', Yekta:'#b8860b', Alper:'#3d6f9e' };
 const CONFIG = {
-  owner: '',            // boş bırakılırsa adresten otomatik bulunur (ör. bizimev.github.io)
-  repo: '',             // boş bırakılırsa otomatik
-  dataBranch: 'data',   // veriler bu dalda tutulur (site yeniden derlenmesin diye)
-  path: 'data.json'
+  owner: '',              // boş bırakılırsa adresten otomatik bulunur
+  repo: '',
+  dataBranch: 'data',     // veriler bu dalda tutulur
+  path: 'data.json',
+  choreStart: '2026-10-12', // nöbet sırasının başladığı pazartesi
+  quietHour: '23:00'        // sınav haftasında sessizlik saati
 };
 const DEFAULT_RULES = [
   'HERKES KENDİ ARKASINI TOPLAR',
@@ -326,30 +471,73 @@ const DEFAULT_RULES = [
   'Misafir gelecekse önceden gruba haber verilir.',
   'Ortak alışveriş bu siteye girilir, borçlar 1 hafta içinde ödenir.'
 ];
-
+const DEFAULT_CHORES = [
+  {id:'mutfak', name:'Mutfak', icon:'🍳'},
+  {id:'banyo', name:'Banyo & tuvalet', icon:'🚿'},
+  {id:'salon', name:'Salon & koridor', icon:'🛋️'},
+  {id:'cop', name:'Çöp & geri dönüşüm', icon:'🗑️'}
+];
 /* ============ i18n ============ */
 const I18N = {
   tr:{
-    appTitle:'Ev Hesabı', tabShop:'Alışverişler', tabSettle:'Hesaplaşma', tabRules:'Ev Kuralları',
-    total:'Toplam', perPerson:'Kişi başı', addPurchase:'Yeni alışveriş', editPurchase:'Alışverişi düzenle',
-    desc:'Ne alındı?', descPh:'ör. Market, deterjan, internet faturası', amount:'Tutar (₺)', paidBy:'Kim ödedi?',
-    add:'Ekle', update:'Güncelle', cancel:'Vazgeç', save:'Kaydet', purchases:'Bu dönemin alışverişleri',
-    noPurchases:'Henüz alışveriş yok. İlk alışverişi yukarıdan ekleyin.',
+    appTitle:'Ev Hesabı',
+    tabHome:'Ev', tabShop:'Alışveriş', tabSettle:'Hesap', tabChores:'Nöbet', tabNeeds:'Eksikler', tabRules:'Kurallar',
+    rulesTitle:'Ev Kuralları',
+    total:'Toplam', perPerson:'Kişi başı (ort.)', yourShare:'Senin payın',
+    addPurchase:'Yeni alışveriş', editPurchase:'Alışverişi düzenle',
+    desc:'Ne alındı?', descPh:'ör. Market, deterjan, internet', amount:'Tutar (₺)', paidBy:'Kim ödedi?',
+    splitAmong:'Kimler arasında bölünsün?', splitAll:'Herkese bölünür (4 kişi)', splitSome:'Sadece {n} kişiye bölünür', onlyFor:'Sadece: {x}',
+    errSplit:'En az bir kişi seç.',
+    add:'Ekle', update:'Güncelle', cancel:'Vazgeç', save:'Kaydet', post:'Paylaş', optional:'isteğe bağlı', choose:'Seç…',
+    purchases:'Bu dönemin alışverişleri', noPurchases:'Henüz alışveriş yok. İlk alışverişi yukarıdan ekleyin.',
     confirmDelete:'“{x}” silinsin mi?', edit:'Düzenle', del:'Sil',
-    transfers:'Kim kime ne kadar gönderecek?', balances:'Durum', paid:'Ödediği: {x}',
+    transfers:'Kim kime ne kadar gönderecek?', balances:'Durum', paid:'Ödediği: {x}', share:'Payı: {x}',
     getsBack:'Alacak {x}', owes:'Borç {x}', even:'Ödeşti',
     sent:'Gönderildi', confirmSent:'{from}, {to} kişisine {amt} gönderdi mi?\nBu satır listeden silinecek.',
     allSettled:'Herkes ödeşti 🎉', nothingYet:'Henüz hesaplanacak alışveriş yok.',
     closePeriod:'Dönemi kapat ve listeyi temizle', confirmClose:'Herkes ödeşti. Alışveriş listesi temizlensin mi?',
-    periodClosed:'Hesap kapandı, liste temizlendi ✔', sentList:'Gönderilenler', undo:'Geri al',
-    confirmUndo:'Bu gönderim geri alınsın mı?', history:'Geçmiş dönemler',
-    historyRow:'{n} alışveriş · toplam {total} · kişi başı {pp}', you:'sen',
+    periodClosed:'Hesap kapandı, liste temizlendi ✔', sentList:'Gönderilenler',
+    history:'Geçmiş dönemler', historyRow:'{n} alışveriş · toplam {total} · kişi başı {pp}', you:'sen',
+    recordPay:'Ödeme kaydet', recordPayHint:'Birine para attıysan buraya yaz. Sonradan biri alışveriş eklese bile ödemen kayıtlı kalır.',
+    payFrom:'Kim gönderdi?', payTo:'Kime?', recordBtn:'Ödemeyi kaydet',
+    errSame:'Gönderen ve alan aynı kişi olamaz.', errPick:'Gönderen ve alanı seç.', payRecorded:'Ödeme kaydedildi ✔',
+    confirmDelPay:'{from} → {to} {amt} ödeme kaydı silinsin mi?',
+    waShare:'WhatsApp’ta paylaş', waSettleHead:'🏠 Ev Hesabı · {d}', waTotal:'Bu dönem toplam: {x}', waWho:'💸 Kim kime gönderecek:', waAllEven:'✅ Herkes ödeşti!',
+    waNeedsHead:'📝 Evde eksikler:',
+    statsTitle:'Aylık özet', statsTotal:'Toplam', statsAvg:'Kişi başı (ort.)', statsCount:'Alışveriş sayısı', statsPaid:'Kim ne ödedi?', statsTop:'En büyük harcamalar',
+    statsEmpty:'Bu ay kayıtlı harcama yok.', statsShare:'payı {x}',
+    choresTitle:'Bu haftanın nöbetleri', choresHint:'Görevler her pazartesi sıradaki kişiye geçer. İşini bitiren “Yaptım”a basar.',
+    choreDoneBtn:'Yaptım', choreDoneBy:'✓ {x} yaptı', choreDoneFor:'✓ {x} yaptı ({y} yerine)', choreNext:'Gelecek hafta: {x}',
+    choreMarked:'Eline sağlık! ✔', confirmUndoChore:'“Yapıldı” işareti kaldırılsın mı?', noChores:'Görev yok. Aşağıdan ekleyin.',
+    scoreTitle:'Son 8 hafta', scoreRow:'{d}/{a} görev', scoreExtra:'+{n} başkasının yerine', scoreNone:'Henüz geçmiş hafta yok. İlk hafta bitince burada görünecek.',
+    missedLast:'Geçen hafta yapılmayanlar', missedNone:'Geçen hafta her şey yapıldı 👏',
+    choreEdit:'Görevleri düzenle', chorePh:'Yeni görev, ör. Balkon', confirmDelChore:'“{x}” görevi silinsin mi?',
+    upcoming:'Yaklaşanlar', allGood:'Her şey yolunda ✨',
+    alChore:'Bu hafta {x} senin', alChoresOpen:'Bu hafta {n} görev daha yapılmadı', alNeeds:'{n} eksik var: {x}',
+    alExam:'{who}: {x}',
+    meHello:'Merhaba {x} 👋', meChoose:'Ayarlar’dan kim olduğunu seç', meChooseHint:'⚙ simgesine bas, “Ben kimim?” kısmından adını seç; sana özel borç ve görev özeti burada görünür.',
+    meOwe:'Göndereceğin: {x}', meGet:'Alacağın: {x}', meEven:'Borcun da alacağın da yok 👌', meGoSettle:'Hesaba git →',
+    notesTitle:'Duyuru panosu', notePh:'ör. Cuma misafirim gelecek, kombi bozuk…', noNotes:'Henüz duyuru yok.', confirmDelNote:'Bu duyuru silinsin mi?',
+    examsTitle:'Sınavlar ve teslimler', examsHint:'Sınavı 7 gün kala sitenin en üstünde herkese hatırlatılır, o hafta sessizlik istenir.',
+    examWho:'Kimin?', examDate:'Tarih', examName:'Ders / sınav', examPh:'ör. Bitirme projesi teslimi', noExams:'Yaklaşan sınav yok.',
+    errExam:'Kimin, hangi ders ve tarihi doldur.', errExamPast:'Geçmiş bir tarih seçtin.',
+    examBanner:'📚 Sınav haftası: {list} — {q}’ten sonra sessizlik lütfen 🙏', examToday:'BUGÜN', examTomorrow:'yarın', examInDays:'{n} gün',
     addRule:'Kural ekle', rulePh:'Yeni kural yaz…', noRules:'Henüz kural yok.',
-    editRulePrompt:'Kuralı düzenle:', confirmDeleteRule:'Bu kural silinsin mi?',
+    editRulePrompt:'Kuralı düzenle:', confirmDeleteRule:'Bu kural silinsin mi?', moveUp:'Yukarı taşı',
+    needsAdd:'Eksik ekle', needsPh:'ör. Tuz, tuvalet kağıdı, ampul', needsTitle:'Alınacaklar',
+    needsHint:'Aldığında ✓’ye bas. Tutarı yazarsan alışverişlere de eklenir.', noNeeds:'Evde eksik yok 🎉',
+    boughtPrompt:'“{x}” alındı. Kaç TL tuttu?\n(Boş bırakırsan sadece listeden silinir.)', needMe:'Önce ⚙ Ayarlar’dan “Ben kimim?” kısmını seç.',
+    bought:'Alındı ✔', boughtAdded:'Alındı ✔ Alışverişlere de eklendi.', addedBy:'{x} ekledi',
     settings:'Ayarlar', me:'Ben kimim?', meNone:'— Seçilmedi —',
-    meHint:'Seçersen “Kim ödedi?” otomatik sen olursun ve seninle ilgili transferler vurgulanır.',
-    ghSection:'GitHub bağlantısı', token:'Erişim anahtarı (token)',
-    tokenHint:'Değişiklik yapmak için gerekli. Sadece bu cihazda saklanır.', tokenHow:'Token oluştur ↗',
+    meHint:'Seçersen ödeyen kısmı otomatik sen olursun; sana ait borç ve görevler vurgulanır.',
+    housePass:'Ev şifresi', setupSection:'Kurulum (sadece bir kişi yapar)',
+    houseHintUnlock:'Evdekilerin bildiği ortak şifreyi yaz, Kaydet’e bas. Bir kere yeterli.',
+    houseHintOk:'✓ Bu cihaz kayıtlı, değişiklik yapabilirsin.',
+    houseHintNoVault:'Henüz ev şifresi belirlenmedi. Token’ı olan kişi aşağıdaki Kurulum kısmına token’ı, buraya da yeni ev şifresini yazıp Kaydet’e bassın.',
+    setupHint:'Token’ı yapıştır, yukarıya bir ev şifresi yaz ve Kaydet. Token şifrelenip saklanır; diğerleri sadece ev şifresini girer.',
+    wrongPass:'Ev şifresi yanlış.', unlocked:'Hoş geldin! Bu cihaz artık kayıtlı ✔', vaultSet:'Ev şifresi belirlendi ✔ Diğerleri artık sadece bu şifreyi girecek.',
+    shortPass:'Ev şifresi en az 6 karakter olmalı.',
+    token:'Erişim anahtarı (token)', tokenHow:'Token oluştur ↗',
     advanced:'Gelişmiş (repo ayarı)', owner:'Kullanıcı / organizasyon', repo:'Repo adı',
     detected:'Otomatik bulunan: {x}', notDetected:'Adresten repo bulunamadı.',
     saved:'Kaydedildi ✔', added:'Eklendi ✔', deleted:'Silindi',
@@ -361,41 +549,68 @@ const I18N = {
     errRate:'GitHub istek sınırı doldu, biraz sonra tekrar dene.',
     errNet:'Bağlantı hatası, internetini kontrol et.', errConflict:'Aynı anda başka biri de değiştirdi, tekrar dene.',
     errAmount:'Geçerli bir tutar gir (ör. 249,90).', errDesc:'Ne alındığını yaz.', errPayer:'Kimin ödediğini seç.',
-    errGone:'Bu transfer zaten işaretlenmiş.', errOther:'Bir hata oluştu ({x}).',
-    syncOk:'Güncel', syncBusy:'Kaydediliyor…', syncErr:'Hata',
-    housePass:'Ev şifresi', setupSection:'Kurulum (sadece bir kişi yapar)',
-    houseHintUnlock:'Evdekilerin bildiği ortak şifreyi yaz, Kaydet’e bas. Bir kere yeterli.',
-    houseHintOk:'✓ Bu cihaz kayıtlı, değişiklik yapabilirsin.',
-    houseHintNoVault:'Henüz ev şifresi belirlenmedi. Token’ı olan kişi aşağıdaki Kurulum kısmına token’ı, buraya da yeni ev şifresini yazıp Kaydet’e bassın.',
-    setupHint:'Token’ı yapıştır, yukarıya bir ev şifresi yaz ve Kaydet. Token şifrelenip saklanır; diğerleri sadece ev şifresini girer.',
-    wrongPass:'Ev şifresi yanlış.', unlocked:'Hoş geldin! Bu cihaz artık kayıtlı ✔', vaultSet:'Ev şifresi belirlendi ✔ Diğerleri artık sadece bu şifreyi girecek.',
-    shortPass:'Ev şifresi en az 6 karakter olmalı.',
-    recordPay:'Ödeme kaydet', recordPayHint:'Birine para attıysan buraya yaz. Sonradan biri alışveriş eklese bile ödemen kayıtlı kalır.',
-    payFrom:'Kim gönderdi?', payTo:'Kime?', recordBtn:'Ödemeyi kaydet', choose:'Seç…',
-    errSame:'Gönderen ve alan aynı kişi olamaz.', errPick:'Gönderen ve alanı seç.', payRecorded:'Ödeme kaydedildi ✔',
-    confirmDelPay:'{from} → {to} {amt} ödeme kaydı silinsin mi?'
+    errGone:'Bu işlem zaten yapılmış.', errOther:'Bir hata oluştu ({x}).',
+    syncOk:'Güncel', syncBusy:'Kaydediliyor…', syncErr:'Hata'
   },
   en:{
-    appTitle:'House Expenses', tabShop:'Purchases', tabSettle:'Settle up', tabRules:'House Rules',
-    total:'Total', perPerson:'Per person', addPurchase:'New purchase', editPurchase:'Edit purchase',
-    desc:'What was bought?', descPh:'e.g. Groceries, detergent, internet bill', amount:'Amount (₺)', paidBy:'Who paid?',
-    add:'Add', update:'Update', cancel:'Cancel', save:'Save', purchases:'Purchases this period',
-    noPurchases:'No purchases yet. Add the first one above.',
+    appTitle:'House Expenses',
+    tabHome:'Home', tabShop:'Purchases', tabSettle:'Settle', tabChores:'Chores', tabNeeds:'To buy', tabRules:'Rules',
+    rulesTitle:'House Rules',
+    total:'Total', perPerson:'Per person (avg.)', yourShare:'Your share',
+    addPurchase:'New purchase', editPurchase:'Edit purchase',
+    desc:'What was bought?', descPh:'e.g. Groceries, detergent, internet', amount:'Amount (₺)', paidBy:'Who paid?',
+    splitAmong:'Split between', splitAll:'Split between everyone (4 people)', splitSome:'Split between {n} people only', onlyFor:'Only: {x}',
+    errSplit:'Choose at least one person.',
+    add:'Add', update:'Update', cancel:'Cancel', save:'Save', post:'Post', optional:'optional', choose:'Choose…',
+    purchases:'Purchases this period', noPurchases:'No purchases yet. Add the first one above.',
     confirmDelete:'Delete “{x}”?', edit:'Edit', del:'Delete',
-    transfers:'Who sends how much to whom?', balances:'Balances', paid:'Paid: {x}',
+    transfers:'Who sends how much to whom?', balances:'Balances', paid:'Paid: {x}', share:'Share: {x}',
     getsBack:'Gets back {x}', owes:'Owes {x}', even:'Settled',
     sent:'Sent', confirmSent:'Did {from} send {amt} to {to}?\nThis line will be removed.',
     allSettled:'Everyone is even 🎉', nothingYet:'No purchases to split yet.',
     closePeriod:'Close period & clear list', confirmClose:'Everyone is even. Clear the purchase list?',
-    periodClosed:'Period closed, list cleared ✔', sentList:'Sent payments', undo:'Undo',
-    confirmUndo:'Undo this payment?', history:'Past periods',
-    historyRow:'{n} purchases · total {total} · per person {pp}', you:'you',
+    periodClosed:'Period closed, list cleared ✔', sentList:'Sent payments',
+    history:'Past periods', historyRow:'{n} purchases · total {total} · per person {pp}', you:'you',
+    recordPay:'Record a payment', recordPayHint:'Sent someone money? Write it here. It stays recorded even if someone adds a purchase later.',
+    payFrom:'Who sent?', payTo:'To whom?', recordBtn:'Record payment',
+    errSame:'Sender and receiver can’t be the same person.', errPick:'Choose the sender and receiver.', payRecorded:'Payment recorded ✔',
+    confirmDelPay:'Delete the payment {from} → {to} {amt}?',
+    waShare:'Share on WhatsApp', waSettleHead:'🏠 House Expenses · {d}', waTotal:'Total this period: {x}', waWho:'💸 Who sends to whom:', waAllEven:'✅ Everyone is even!',
+    waNeedsHead:'📝 Missing at home:',
+    statsTitle:'Monthly summary', statsTotal:'Total', statsAvg:'Per person (avg.)', statsCount:'Purchases', statsPaid:'Who paid what?', statsTop:'Biggest expenses',
+    statsEmpty:'No expenses recorded this month.', statsShare:'share {x}',
+    choresTitle:'This week’s chores', choresHint:'Chores rotate to the next person every Monday. Tap “Done” when you finish.',
+    choreDoneBtn:'Done', choreDoneBy:'✓ Done by {x}', choreDoneFor:'✓ Done by {x} (for {y})', choreNext:'Next week: {x}',
+    choreMarked:'Nice work! ✔', confirmUndoChore:'Remove the “done” mark?', noChores:'No chores. Add some below.',
+    scoreTitle:'Last 8 weeks', scoreRow:'{d}/{a} chores', scoreExtra:'+{n} covering for others', scoreNone:'No past weeks yet. Shows up after the first week.',
+    missedLast:'Missed last week', missedNone:'Everything got done last week 👏',
+    choreEdit:'Edit chores', chorePh:'New chore, e.g. Balcony', confirmDelChore:'Delete the chore “{x}”?',
+    upcoming:'Coming up', allGood:'All good ✨',
+    alChore:'{x} is yours this week', alChoresOpen:'{n} chores still open this week', alNeeds:'{n} missing: {x}',
+    alExam:'{who}: {x}',
+    meHello:'Hi {x} 👋', meChoose:'Tell us who you are in Settings', meChooseHint:'Tap ⚙ and pick your name under “Who am I?”; your personal debts and chores will show here.',
+    meOwe:'You send: {x}', meGet:'You get: {x}', meEven:'You owe nothing and are owed nothing 👌', meGoSettle:'Go to Settle →',
+    notesTitle:'Notice board', notePh:'e.g. Guest coming Friday, boiler broken…', noNotes:'No notices yet.', confirmDelNote:'Delete this notice?',
+    examsTitle:'Exams & deadlines', examsHint:'7 days before an exam it’s shown at the top for everyone and quiet hours are requested.',
+    examWho:'Whose?', examDate:'Date', examName:'Course / exam', examPh:'e.g. Capstone project deadline', noExams:'No upcoming exams.',
+    errExam:'Fill in who, the course and the date.', errExamPast:'That date is in the past.',
+    examBanner:'📚 Exam week: {list} — quiet after {q} please 🙏', examToday:'TODAY', examTomorrow:'tomorrow', examInDays:'in {n} days',
     addRule:'Add a rule', rulePh:'Write a new rule…', noRules:'No rules yet.',
-    editRulePrompt:'Edit rule:', confirmDeleteRule:'Delete this rule?',
+    editRulePrompt:'Edit rule:', confirmDeleteRule:'Delete this rule?', moveUp:'Move up',
+    needsAdd:'Add a missing item', needsPh:'e.g. Salt, toilet paper, light bulb', needsTitle:'To buy',
+    needsHint:'Press ✓ when bought. Enter the price to add it to purchases too.', noNeeds:'Nothing missing 🎉',
+    boughtPrompt:'“{x}” bought. How much was it?\n(Leave empty to just remove it from the list.)', needMe:'First choose “Who am I?” in ⚙ Settings.',
+    bought:'Bought ✔', boughtAdded:'Bought ✔ Also added to purchases.', addedBy:'added by {x}',
     settings:'Settings', me:'Who am I?', meNone:'— Not set —',
-    meHint:'If set, “Who paid?” defaults to you and your transfers are highlighted.',
-    ghSection:'GitHub connection', token:'Access token',
-    tokenHint:'Needed to make changes. Stored only on this device.', tokenHow:'Create a token ↗',
+    meHint:'If set, “Who paid?” defaults to you and your debts and chores are highlighted.',
+    housePass:'House password', setupSection:'Setup (done by one person only)',
+    houseHintUnlock:'Type the shared house password and press Save. Once is enough.',
+    houseHintOk:'✓ This device is registered, you can make changes.',
+    houseHintNoVault:'No house password yet. Whoever has the token: paste it under Setup below, type a new house password here, and Save.',
+    setupHint:'Paste the token, type a house password above and Save. The token is stored encrypted; others only enter the house password.',
+    wrongPass:'Wrong house password.', unlocked:'Welcome! This device is now registered ✔', vaultSet:'House password set ✔ Others now just enter this password.',
+    shortPass:'House password must be at least 6 characters.',
+    token:'Access token', tokenHow:'Create a token ↗',
     advanced:'Advanced (repo settings)', owner:'User / organization', repo:'Repository name',
     detected:'Auto-detected: {x}', notDetected:'Could not detect the repo from the address.',
     saved:'Saved ✔', added:'Added ✔', deleted:'Deleted',
@@ -407,19 +622,8 @@ const I18N = {
     errRate:'GitHub rate limit reached, try again shortly.',
     errNet:'Network error, check your connection.', errConflict:'Someone else changed it at the same time, try again.',
     errAmount:'Enter a valid amount (e.g. 249.90).', errDesc:'Describe what was bought.', errPayer:'Choose who paid.',
-    errGone:'This transfer was already marked.', errOther:'Something went wrong ({x}).',
-    syncOk:'Up to date', syncBusy:'Saving…', syncErr:'Error',
-    housePass:'House password', setupSection:'Setup (done by one person only)',
-    houseHintUnlock:'Type the shared house password and press Save. Once is enough.',
-    houseHintOk:'✓ This device is registered, you can make changes.',
-    houseHintNoVault:'No house password yet. Whoever has the token: paste it under Setup below, type a new house password here, and Save.',
-    setupHint:'Paste the token, type a house password above and Save. The token is stored encrypted; others only enter the house password.',
-    wrongPass:'Wrong house password.', unlocked:'Welcome! This device is now registered ✔', vaultSet:'House password set ✔ Others now just enter this password.',
-    shortPass:'House password must be at least 6 characters.',
-    recordPay:'Record a payment', recordPayHint:'Sent someone money? Write it here. It stays recorded even if someone adds a purchase later.',
-    payFrom:'Who sent?', payTo:'To whom?', recordBtn:'Record payment', choose:'Choose…',
-    errSame:'Sender and receiver can’t be the same person.', errPick:'Choose the sender and receiver.', payRecorded:'Payment recorded ✔',
-    confirmDelPay:'Delete the payment {from} → {to} {amt}?'
+    errGone:'This was already done.', errOther:'Something went wrong ({x}).',
+    syncOk:'Up to date', syncBusy:'Saving…', syncErr:'Error'
   }
 };
 
@@ -436,9 +640,23 @@ const fill = (s, o) => s.replace(/\{(\w+)\}/g, (_, k) => o[k] ?? '');
 const esc = s => String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const uid = () => Date.now().toString(36) + Math.random().toString(36).slice(2, 7);
 const sleep = ms => new Promise(r => setTimeout(r, ms));
+const loc = () => lang === 'tr' ? 'tr-TR' : 'en-GB';
 const money = c => new Intl.NumberFormat(lang === 'tr' ? 'tr-TR' : 'en-US', {style:'currency', currency:'TRY'}).format((c || 0) / 100);
-const dateStr = iso => { try{ return new Date(iso).toLocaleDateString(lang === 'tr' ? 'tr-TR' : 'en-GB', {day:'numeric', month:'short'}); }catch{ return ''; } };
-const avatar = (p, lg) => `<span class="av${lg ? ' lg' : ''}" style="background:${COLORS[p] || '#888'}">${esc(p[0])}</span>`;
+const dateStr = iso => { try{ return new Date(iso).toLocaleDateString(loc(), {day:'numeric', month:'short'}); }catch{ return ''; } };
+const dateTimeStr = iso => { try{ return new Date(iso).toLocaleString(loc(), {day:'numeric', month:'short', hour:'2-digit', minute:'2-digit'}); }catch{ return ''; } };
+const avatar = (p, size) => `<span class="av${size ? ' ' + size : ''}" style="background:${COLORS[p] || '#888'}">${esc((p || '?')[0])}</span>`;
+const me = () => LS.get('ev.me', '');
+const mod = (a, n) => ((a % n) + n) % n;
+
+/* tarih yardımcıları (yerel gün, "YYYY-MM-DD") */
+const pad = n => String(n).padStart(2, '0');
+const ymd = d => `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}`;
+const todayStr = () => ymd(new Date());
+const dayNum = s => { const [y, m, d] = s.split('-').map(Number); return Math.round(Date.UTC(y, m - 1, d) / 864e5); };
+const addDays = (s, n) => { const d = new Date((dayNum(s) + n) * 864e5); return `${d.getUTCFullYear()}-${pad(d.getUTCMonth() + 1)}-${pad(d.getUTCDate())}`; };
+const monthKey = d => `${d.getFullYear()}-${pad(d.getMonth() + 1)}`;
+const fmtDay = (s, opt = {weekday:'short', day:'numeric', month:'short'}) => { const [y, m, d] = s.split('-').map(Number); return new Date(y, m - 1, d).toLocaleDateString(loc(), opt); };
+const curWeek = () => Math.floor((dayNum(todayStr()) - dayNum(CONFIG.choreStart)) / 7);
 
 function parseAmount(raw){
   let s = String(raw).trim().replace(/[₺\s]/g, '');
@@ -456,6 +674,7 @@ function parseAmount(raw){
   const c = Math.round(parseFloat(s) * 100);
   return c > 0 ? c : NaN;
 }
+const amountInput = c => (c / 100).toFixed(2).replace('.', lang === 'tr' ? ',' : '.').replace(/[,.]00$/, '');
 
 function b64encode(str){
   const bytes = new TextEncoder().encode(str); let bin = '';
@@ -487,25 +706,45 @@ async function openVault(vault, pass){
 
 /* ============ data ============ */
 function emptyData(){
-  return { version:1, purchases:[], payments:[], rules:DEFAULT_RULES.map(text => ({id:uid(), text})), history:[] };
+  return { version:2, purchases:[], payments:[], rules:DEFAULT_RULES.map(text => ({id:uid(), text})), history:[],
+           needs:[], notes:[], exams:[], ledger:[], chores:DEFAULT_CHORES.map(c => ({...c})), choreLog:[], topRuleAdded:true };
 }
 function normalize(d){
   d = (d && typeof d === 'object') ? d : emptyData();
-  for(const k of ['purchases','payments','rules','history']) if(!Array.isArray(d[k])) d[k] = [];
+  for(const k of ['purchases','payments','rules','history','needs','notes','exams','ledger','choreLog']) if(!Array.isArray(d[k])) d[k] = [];
+  if(!Array.isArray(d.chores)) d.chores = DEFAULT_CHORES.map(c => ({...c}));
   return d;
 }
 
-/* Kişi kişi hesap (kuruş cinsinden): her alışverişte herkes, alışverişi yapana kendi payını borçlanır.
+/* Tek seferlik: "HERKES KENDİ ARKASINI TOPLAR" kuralını 1. sıraya ekler (silinirse bir daha eklenmez) */
+const TOP_RULE = 'HERKES KENDİ ARKASINI TOPLAR';
+async function migrate(){
+  if(!DATA || DATA.topRuleAdded || busy) return;
+  if(store() === github && !token()) return;
+  await mutate('Kural eklendi: ' + TOP_RULE, d => {
+    if(d.topRuleAdded) return;
+    d.rules = d.rules.filter(r => r.text.trim().toLocaleUpperCase('tr') !== TOP_RULE);
+    d.rules.unshift({id:uid(), text:TOP_RULE});
+    d.topRuleAdded = true;
+  });
+}
+
+const splitOf = p => {
+  const s = Array.isArray(p.split) ? PEOPLE.filter(x => p.split.includes(x)) : [];
+  return s.length ? s : PEOPLE;
+};
+
+/* Kişi kişi hesap (kuruş): her alışverişte bölünen kişiler, alışverişi yapana kendi payını borçlanır.
    Gönderilen paralar o kişiye olan borçtan düşülür. İki kişi arasındaki karşılıklı borçlar netleşir. */
 function compute(d){
-  const n = PEOPLE.length, paid = {}, owe = {}, bal = {};
-  PEOPLE.forEach(a => { paid[a] = 0; bal[a] = 0; owe[a] = {}; PEOPLE.forEach(b => owe[a][b] = 0); });
+  const paid = {}, owe = {}, bal = {}, share = {};
+  PEOPLE.forEach(a => { paid[a] = 0; bal[a] = 0; share[a] = 0; owe[a] = {}; PEOPLE.forEach(b => owe[a][b] = 0); });
   let total = 0;
   d.purchases.forEach(p => {
     if(!(p.payer in paid)) return;
-    const amt = p.amount || 0, base = Math.floor(amt / n), rem = amt - base * n;
+    const sp = splitOf(p), k = sp.length, amt = p.amount || 0, base = Math.floor(amt / k), rem = amt - base * k;
     total += amt; paid[p.payer] += amt;
-    PEOPLE.forEach((q, i) => { if(q !== p.payer) owe[q][p.payer] += base + (i < rem ? 1 : 0); });
+    sp.forEach((q, i) => { const s = base + (i < rem ? 1 : 0); share[q] += s; if(q !== p.payer) owe[q][p.payer] += s; });
   });
   d.payments.forEach(x => { if(x.from in owe && x.to in owe) owe[x.from][x.to] -= x.amount; });
 
@@ -518,15 +757,46 @@ function compute(d){
   }));
   transfers.forEach(x => { bal[x.from] -= x.amount; bal[x.to] += x.amount; });
   transfers.sort((x, y) => PEOPLE.indexOf(x.from) - PEOPLE.indexOf(y.from) || y.amount - x.amount);
-  return { total, per: Math.round(total / n), paid, bal, transfers };
+  return { total, per: Math.round(total / PEOPLE.length), paid, bal, share, transfers };
 }
 
 function archive(d){
   const c = compute(d);
   d.history.unshift({ id:uid(), closedAt:new Date().toISOString(), total:c.total, per:c.per, count:d.purchases.length });
   d.history = d.history.slice(0, 24);
+  // aylık özet için alışverişleri sakla (son ~13 ay)
+  const cutoff = Date.now() - 400 * 864e5;
+  d.ledger = d.ledger.concat(d.purchases.map(p => ({desc:p.desc, amount:p.amount, payer:p.payer, split:p.split, date:p.date, kind:p.kind})))
+                     .filter(p => new Date(p.date).getTime() > cutoff);
   d.purchases = []; d.payments = [];
 }
+
+/* ============ nöbet ============ */
+const assignee = (task, i, w) => PEOPLE[mod(i + w + (task.shift || 0), PEOPLE.length)];
+const choreLogFor = (d, taskId, w) => d.choreLog.find(l => l.task === taskId && l.week === w);
+function choreStats(d){
+  const w = curWeek(), from = Math.max(0, w - 8), st = {}, missed = [];
+  PEOPLE.forEach(p => st[p] = {assigned:0, done:0, extra:0});
+  for(let k = from; k < w; k++){
+    d.chores.forEach((task, i) => {
+      const a = assignee(task, i, k), log = choreLogFor(d, task.id, k);
+      st[a].assigned++;
+      if(log && log.by === a) st[a].done++;
+      else if(log && log.by in st) st[log.by].extra++;
+      if(!log && k === w - 1) missed.push({task, who:a});
+    });
+  }
+  return {st, missed, weeks:w - from};
+}
+
+/* ============ sınavlar ============ */
+function upcomingExams(d, days){
+  const today = dayNum(todayStr());
+  return d.exams.map(e => ({...e, left:dayNum(e.date) - today}))
+                .filter(e => e.left >= 0 && (days === undefined || e.left <= days))
+                .sort((a, b) => a.left - b.left);
+}
+const examWhen = left => left === 0 ? t('examToday') : left === 1 ? t('examTomorrow') : fill(t('examInDays'), {n:left});
 
 /* ============ storage: GitHub or local preview ============ */
 function detectRepo(){
@@ -590,9 +860,8 @@ const github = {
   async save(data, sha, label){
     if(!token()) throw errCode('notoken');
     if(!sha) await this.ensureBranch();
-    const me = LS.get('ev.me', '');
     const body = {
-      message: `${label}${me ? ' (' + me + ')' : ''}`,
+      message: `${label}${me() ? ' (' + me() + ')' : ''}`,
       content: b64encode(JSON.stringify(data, null, 2) + '\n'),
       branch: CONFIG.dataBranch
     };
@@ -610,7 +879,7 @@ const local = {
 const store = () => getRepo() ? github : local;
 
 /* ============ state + sync ============ */
-let DATA = null, busy = false, editingId = null, payer = '';
+let DATA = null, busy = false, editingId = null, payer = '', splitSel = new Set(PEOPLE), statsOff = 0;
 
 function setSync(s){
   const el = $('#sync');
@@ -635,6 +904,7 @@ async function refresh(){
     const {data} = await store().load();
     if(!busy){ DATA = data; render(); }
     setSync('ok');
+    migrate();
   }catch(e){ setSync('err'); if(!DATA){ DATA = emptyData(); render(); } showErr(e, true); }
 }
 
@@ -661,7 +931,28 @@ async function mutate(label, fn){
   }finally{ busy = false; }
 }
 
+/* ============ tabs ============ */
+const TABS = [['home','🏠','tabHome'], ['rules','📜','tabRules'], ['shop','🛒','tabShop'], ['settle','💸','tabSettle'],
+              ['chores','🧹','tabChores'], ['needs','📝','tabNeeds']];
+$('#tabs').innerHTML = TABS.map(([id, ic, key]) =>
+  `<button data-tab="${id}"><span>${ic}</span><span data-i18n="${key}"></span><span class="badge" id="badge-${id}" hidden></span></button>`).join('');
+function setTab(name){
+  if(!TABS.some(x => x[0] === name)) name = 'home';
+  TABS.forEach(([n]) => $('#tab-' + n).hidden = n !== name);
+  document.querySelectorAll('nav.tabs button').forEach(b => b.classList.toggle('on', b.dataset.tab === name));
+  const b = document.querySelector(`nav.tabs button[data-tab="${name}"]`), nav = $('#tabs');
+  if(b) nav.scrollTo({left: b.offsetLeft - nav.clientWidth / 2 + b.clientWidth / 2, behavior:'smooth'});
+  LS.set('ev.tab', name);
+}
+$('#tabs').addEventListener('click', e => { const b = e.target.closest('button[data-tab]'); if(b){ setTab(b.dataset.tab); window.scrollTo({top:0}); } });
+function setBadge(id, n){ const b = $('#badge-' + id); b.hidden = !n; b.textContent = n; }
+
 /* ============ rendering ============ */
+function fillPeopleSelect(el, def){
+  const keep = el.value || def || '';
+  el.innerHTML = `<option value="">${esc(t('choose'))}</option>` + PEOPLE.map(p => `<option value="${esc(p)}">${esc(p)}</option>`).join('');
+  el.value = keep;
+}
 function renderStatic(){
   document.documentElement.lang = lang;
   document.title = t('appTitle');
@@ -671,54 +962,120 @@ function renderStatic(){
   $('#names').textContent = PEOPLE.join(' · ');
   $('#formTitle').textContent = t(editingId ? 'editPurchase' : 'addPurchase');
   $('#pSubmit').textContent = t(editingId ? 'update' : 'add');
-  renderPayers();
-  ['#payFrom', '#payTo'].forEach(sel => {
-    const el = $(sel), keep = el.value || (sel === '#payFrom' ? LS.get('ev.me', '') : '');
-    el.innerHTML = `<option value="">${esc(t('choose'))}</option>` + PEOPLE.map(p => `<option value="${esc(p)}">${esc(p)}</option>`).join('');
-    el.value = keep;
-  });
+  renderPayers(); renderSplit();
+  fillPeopleSelect($('#payFrom'), me());
+  fillPeopleSelect($('#payTo'));
+  fillPeopleSelect($('#examWho'), me());
 }
 function renderPayers(){
   $('#payers').innerHTML = PEOPLE.map(p =>
     `<button type="button" data-p="${esc(p)}" class="${payer === p ? 'on' : ''}">${avatar(p)}${esc(p)}</button>`).join('');
+}
+function renderSplit(){
+  $('#splitChips').innerHTML = PEOPLE.map(p =>
+    `<button type="button" data-s="${esc(p)}" class="chip ${splitSel.has(p) ? 'on' : ''}">${avatar(p)}${esc(p)}</button>`).join('');
+  $('#splitInfo').textContent = splitSel.size === PEOPLE.length ? t('splitAll') : fill(t('splitSome'), {n:splitSel.size});
 }
 function renderBanner(){
   const b = $('#banner');
   if(store() === local){ b.hidden = false; b.textContent = t('localMode'); }
   else if(!token()){ b.hidden = false; b.innerHTML = `${esc(t('readOnly'))} <button type="button" id="bannerBtn">${esc(t('readOnlyBtn'))}</button>.`; }
   else b.hidden = true;
+
+  const ex = upcomingExams(DATA, 7), eb = $('#examBanner');
+  eb.hidden = !ex.length;
+  if(ex.length){
+    const list = ex.map(e => `<b>${esc(e.who)}</b> – ${esc(e.name)} (${esc(fmtDay(e.date, {weekday:'short', day:'numeric', month:'short'}))}${e.left <= 1 ? ', ' + esc(examWhen(e.left)) : ''})`).join(' · ');
+    eb.innerHTML = fill(esc(t('examBanner')), {list, q:esc(CONFIG.quietHour)});
+  }
 }
 
 function render(){
   if(!DATA) return;
   renderBanner();
-  const c = compute(DATA), me = LS.get('ev.me', '');
+  const c = compute(DATA), m = me();
+  renderHome(c, m);
+  renderShop(c, m);
+  renderSettle(c, m);
+  renderChores(m);
+  renderNeeds();
+  renderRules();
+}
 
-  // summary
+/* ---- Ev ---- */
+function renderHome(c, m){
+  // kişisel özet
+  let h;
+  if(!m){
+    h = `<div class="me-card"><span class="ic">👋</span><div class="li-main"><b>${esc(t('meChoose'))}</b><small>${esc(t('meChooseHint'))}</small></div></div>`;
+  } else {
+    const out = c.transfers.filter(x => x.from === m), inn = c.transfers.filter(x => x.to === m);
+    const sum = a => a.reduce((s, x) => s + x.amount, 0);
+    let lines = '';
+    if(out.length) lines += `<li><b>${esc(fill(t('meOwe'), {x:money(sum(out))}))}</b> — ${out.map(x => `${esc(x.to)} ${money(x.amount)}`).join(', ')}</li>`;
+    if(inn.length) lines += `<li><b>${esc(fill(t('meGet'), {x:money(sum(inn))}))}</b> — ${inn.map(x => `${esc(x.from)} ${money(x.amount)}`).join(', ')}</li>`;
+    if(!lines) lines = `<li>${esc(t('meEven'))}</li>`;
+    h = `<div class="me-card">${avatar(m, 'lg')}<div class="li-main"><b style="font-size:18px">${esc(fill(t('meHello'), {x:m}))}</b>
+         <ul class="me-lines">${lines}</ul>
+         ${out.length || inn.length ? `<button class="btn ghost sm" style="margin-top:8px" data-go="settle">${esc(t('meGoSettle'))}</button>` : ''}</div></div>`;
+  }
+  $('#meCard').innerHTML = h;
+
+  // yaklaşanlar
+  const al = [], w = curWeek();
+  upcomingExams(DATA, 3).forEach(e => al.push({ic:'📚', text:fill(t('alExam'), {who:e.who, x:e.name}), tag:examWhen(e.left), cls:e.left <= 1 ? 'bad' : 'warn', go:'home'}));
+  const open = DATA.chores.map((task, i) => ({task, who:assignee(task, i, w)})).filter(x => !choreLogFor(DATA, x.task.id, w));
+  if(m) open.filter(x => x.who === m).forEach(x => al.push({ic:x.task.icon || '🧹', text:fill(t('alChore'), {x:x.task.name}), tag:'', cls:'warn', go:'chores'}));
+  else if(open.length) al.push({ic:'🧹', text:fill(t('alChoresOpen'), {n:open.length}), tag:'', cls:'warn', go:'chores'});
+  if(DATA.needs.length) al.push({ic:'📝', text:fill(t('alNeeds'), {n:DATA.needs.length, x:DATA.needs.slice(0, 3).map(x => x.text).join(', ') + (DATA.needs.length > 3 ? '…' : '')}), tag:'', go:'needs'});
+  $('#alerts').innerHTML = al.length ? al.map(a => `
+    <li class="alert" data-go="${a.go}"><span class="ic">${a.ic}</span><div class="li-main"><b>${esc(a.text)}</b></div>${a.tag ? `<span class="tag ${a.cls || 'muted'}">${esc(a.tag)}</span>` : ''}<span class="muted">›</span></li>`).join('')
+    : `<div class="empty">${esc(t('allGood'))}</div>`;
+
+  // duyurular
+  const notes = [...DATA.notes].sort((a, b) => (b.date || '').localeCompare(a.date || ''));
+  $('#noteList').innerHTML = notes.length ? notes.map(n => `
+    <li>${avatar(n.by)}<div class="li-main"><b class="brk">${esc(n.text)}</b><small>${esc(n.by || '?')} · ${dateTimeStr(n.date)}</small></div>
+      <button class="mini" data-notedel="${n.id}" title="${esc(t('del'))}">✕</button></li>`).join('')
+    : `<div class="empty">${esc(t('noNotes'))}</div>`;
+
+  // sınavlar
+  const ex = upcomingExams(DATA);
+  $('#examList').innerHTML = ex.length ? ex.map(e => `
+    <li>${avatar(e.who)}<div class="li-main"><b>${esc(e.name)}</b><small>${esc(e.who)} · ${esc(fmtDay(e.date))}</small></div>
+      <span class="tag ${e.left <= 1 ? 'bad' : e.left <= 7 ? 'warn' : 'muted'}">${esc(examWhen(e.left))}</span>
+      <button class="mini" data-examdel="${e.id}" title="${esc(t('del'))}">✕</button></li>`).join('')
+    : `<div class="empty">${esc(t('noExams'))}</div>`;
+}
+
+/* ---- Alışveriş ---- */
+function renderShop(c, m){
   $('#sTotal').textContent = money(c.total);
-  $('#sPer').textContent = money(c.per);
+  $('#sPerLabel').textContent = t(m ? 'yourShare' : 'perPerson');
+  $('#sPer').textContent = money(m ? c.share[m] : c.per);
   $('#pCount').textContent = DATA.purchases.length ? `(${DATA.purchases.length})` : '';
-
-  // purchases
   const items = [...DATA.purchases].sort((a, b) => (b.date || '').localeCompare(a.date || ''));
-  $('#pList').innerHTML = items.length ? items.map(p => `
-    <li>
+  $('#pList').innerHTML = items.length ? items.map(p => {
+    const sp = splitOf(p), only = sp.length < PEOPLE.length ? ` · ${esc(fill(t('onlyFor'), {x:sp.join(', ')}))}` : '';
+    return `<li>
       ${avatar(p.payer)}
-      <div class="li-main"><b>${esc(p.desc)}</b><small>${esc(p.payer)} · ${dateStr(p.date)}</small></div>
+      <div class="li-main"><b>${esc(p.desc)}</b><small>${esc(p.payer)} · ${dateStr(p.date)}${only}</small></div>
       <span class="amt">${money(p.amount)}</span>
       <button class="mini" data-edit="${p.id}" title="${esc(t('edit'))}">✎</button>
       <button class="mini" data-del="${p.id}" title="${esc(t('del'))}">✕</button>
-    </li>`).join('') : `<div class="empty">${esc(t('noPurchases'))}</div>`;
+    </li>`;
+  }).join('') : `<div class="empty">${esc(t('noPurchases'))}</div>`;
+}
 
-  // transfers
-  const badge = $('#settleBadge');
-  badge.hidden = !c.transfers.length; badge.textContent = c.transfers.length;
+/* ---- Hesap ---- */
+function renderSettle(c, m){
+  setBadge('settle', c.transfers.length);
   let tr = '';
   if(c.transfers.length){
     tr = c.transfers.map(x => `
-      <div class="tr${me && (x.from === me || x.to === me) ? ' me' : ''}">
-        <div class="who">${avatar(x.from)}${esc(x.from)}${x.from === me ? ` <small class="muted">(${esc(t('you'))})</small>` : ''}
-          <span class="arrow">→</span>${avatar(x.to)}${esc(x.to)}${x.to === me ? ` <small class="muted">(${esc(t('you'))})</small>` : ''}</div>
+      <div class="tr${m && (x.from === m || x.to === m) ? ' me' : ''}">
+        <div class="who">${avatar(x.from)}${esc(x.from)}${x.from === m ? ` <small class="muted">(${esc(t('you'))})</small>` : ''}
+          <span class="arrow">→</span>${avatar(x.to)}${esc(x.to)}${x.to === m ? ` <small class="muted">(${esc(t('you'))})</small>` : ''}</div>
         <span class="amt">${money(x.amount)}</span>
         <button class="btn ok sm" data-sent="${esc(x.from)}|${esc(x.to)}|${x.amount}">✓ ${esc(t('sent'))}</button>
       </div>`).join('');
@@ -729,58 +1086,189 @@ function render(){
     tr = `<div class="empty">${esc(t('nothingYet'))}</div>`;
   }
   $('#transfers').innerHTML = tr;
+  $('#waSettle').hidden = !DATA.purchases.length;
 
-  // balances
   $('#people').innerHTML = PEOPLE.map(p => {
     const b = c.bal[p];
     const pill = b > 0 ? `<span class="pill pos">${esc(fill(t('getsBack'), {x:money(b)}))}</span>`
               : b < 0 ? `<span class="pill neg">${esc(fill(t('owes'), {x:money(-b)}))}</span>`
               : `<span class="pill zero">${esc(t('even'))}</span>`;
-    return `<div class="person">${avatar(p, true)}<div><div class="nm">${esc(p)}</div>
-      <small>${esc(fill(t('paid'), {x:money(c.paid[p])}))}</small>${pill}</div></div>`;
+    return `<div class="person">${avatar(p, 'lg')}<div><div class="nm">${esc(p)}</div>
+      <small>${esc(fill(t('paid'), {x:money(c.paid[p])}))}</small><small>${esc(fill(t('share'), {x:money(c.share[p])}))}</small>${pill}</div></div>`;
   }).join('');
 
-  // payments this period
   $('#paymentsCard').hidden = !DATA.payments.length;
   $('#payList').innerHTML = [...DATA.payments].reverse().map(x => `
     <li>${avatar(x.from)}<div class="li-main"><b>${esc(x.from)} → ${esc(x.to)}</b><small>${dateStr(x.date)}</small></div>
       <span class="amt">${money(x.amount)}</span>
       <button class="mini" data-undo="${x.id}" title="${esc(t('del'))}">✕</button></li>`).join('');
 
-  // history
+  renderStats();
+
   $('#historyCard').hidden = !DATA.history.length;
   $('#histList').innerHTML = DATA.history.map(h => `
     <li><div class="li-main"><b>${dateStr(h.closedAt)}</b>
       <small>${esc(fill(t('historyRow'), {n:h.count, total:money(h.total), pp:money(h.per)}))}</small></div></li>`).join('');
+}
 
-  // rules
-  $('#rList').innerHTML = DATA.rules.length ? DATA.rules.map(r => `
+function renderStats(){
+  const now = new Date(), dt = new Date(now.getFullYear(), now.getMonth() - statsOff, 1), key = monthKey(dt);
+  $('#mLabel').textContent = dt.toLocaleDateString(loc(), {month:'long', year:'numeric'});
+  $('#mNext').disabled = statsOff === 0;
+  $('#mPrev').disabled = statsOff >= 12;
+  const items = [...DATA.ledger, ...DATA.purchases].filter(p => p.date && monthKey(new Date(p.date)) === key);
+  if(!items.length){ $('#stats').innerHTML = `<div class="empty">${esc(t('statsEmpty'))}</div>`; return; }
+  const total = items.reduce((s, p) => s + p.amount, 0);
+  const paid = {}, share = {};
+  PEOPLE.forEach(p => { paid[p] = 0; share[p] = 0; });
+  items.forEach(p => {
+    if(p.payer in paid) paid[p.payer] += p.amount;
+    const sp = splitOf(p), base = Math.floor(p.amount / sp.length), rem = p.amount - base * sp.length;
+    sp.forEach((q, i) => share[q] += base + (i < rem ? 1 : 0));
+  });
+  const max = Math.max(1, ...PEOPLE.map(p => paid[p]));
+  const top = [...items].sort((a, b) => b.amount - a.amount).slice(0, 5);
+  $('#stats').innerHTML = `
+    <div class="split3">
+      <div><span>${esc(t('statsTotal'))}</span><b>${money(total)}</b></div>
+      <div><span>${esc(t('statsAvg'))}</span><b>${money(Math.round(total / PEOPLE.length))}</b></div>
+      <div><span>${esc(t('statsCount'))}</span><b>${items.length}</b></div>
+    </div>
+    <h3 class="sub">${esc(t('statsPaid'))}</h3>
+    ${PEOPLE.map(p => `<div class="barrow"><span>${esc(p)}</span>
+        <div class="track"><div class="fill" style="width:${(paid[p] / max * 100).toFixed(1)}%;background:${COLORS[p]}"></div></div>
+        <span class="v">${money(paid[p])} <small class="muted" style="font-weight:400">· ${esc(fill(t('statsShare'), {x:money(share[p])}))}</small></span></div>`).join('')}
+    <h3 class="sub">${esc(t('statsTop'))}</h3>
+    <ul class="list">${top.map(p => `<li>${avatar(p.payer, 'sm')}<div class="li-main"><b>${esc(p.desc)}</b><small>${dateStr(p.date)}</small></div><span class="amt">${money(p.amount)}</span></li>`).join('')}</ul>`;
+}
+
+/* ---- Nöbet ---- */
+function renderChores(m){
+  const w = curWeek(), start = addDays(CONFIG.choreStart, w * 7), end = addDays(start, 6);
+  $('#weekLabel').textContent = `(${fmtDay(start, {day:'numeric', month:'short'})} – ${fmtDay(end, {day:'numeric', month:'short'})})`;
+  let mine = 0;
+  $('#choreList').innerHTML = DATA.chores.length ? DATA.chores.map((task, i) => {
+    const who = assignee(task, i, w), log = choreLogFor(DATA, task.id, w), next = assignee(task, i, w + 1);
+    if(!log && who === m) mine++;
+    const opts = PEOPLE.map(p => `<option value="${esc(p)}" ${p === who ? 'selected' : ''}>${esc(p)}${p === m ? ' (' + esc(t('you')) + ')' : ''}</option>`).join('');
+    const status = log
+      ? `<span class="tag ok">${esc(log.by === who ? fill(t('choreDoneBy'), {x:log.by}) : fill(t('choreDoneFor'), {x:log.by, y:who}))}</span>
+         <span class="grow"></span><button class="mini" data-choreundo="${task.id}" title="${esc(t('del'))}">↶</button>`
+      : `<span class="grow"></span><button class="btn ok sm" data-choredone="${task.id}">✓ ${esc(t('choreDoneBtn'))}</button>`;
+    return `<div class="chore${who === m && !log ? ' me' : ''}${log ? ' isdone' : ''}">
+      <div class="chore-top"><span class="ic">${task.icon || '🧹'}</span><span class="nm">${esc(task.name)}</span>
+        <small>${esc(fill(t('choreNext'), {x:next}))}</small></div>
+      <div class="chore-mid">${avatar(who)}<select data-choreassign="${task.id}" aria-label="assignee">${opts}</select>${status}</div>
+    </div>`;
+  }).join('') : `<div class="empty">${esc(t('noChores'))}</div>`;
+  setBadge('chores', mine);
+
+  const {st, missed, weeks} = choreStats(DATA);
+  if(!weeks){ $('#choreScore').innerHTML = `<div class="empty">${esc(t('scoreNone'))}</div>`; }
+  else {
+    $('#choreScore').innerHTML = PEOPLE.map(p => {
+      const s = st[p], pct = s.assigned ? s.done / s.assigned : 1;
+      return `<div class="barrow"><span>${esc(p)}</span>
+        <div class="track"><div class="fill" style="width:${(pct * 100).toFixed(0)}%;background:${pct >= .75 ? 'var(--ok)' : pct >= .5 ? 'var(--warn)' : 'var(--bad)'}"></div></div>
+        <span class="v">${esc(fill(t('scoreRow'), {d:s.done, a:s.assigned}))}${s.extra ? ` <small class="muted" style="font-weight:400">${esc(fill(t('scoreExtra'), {n:s.extra}))}</small>` : ''}</span></div>`;
+    }).join('') + `<h3 class="sub">${esc(t('missedLast'))}</h3>` +
+    (missed.length ? `<ul class="list">${missed.map(x => `<li>${avatar(x.who, 'sm')}<div class="li-main"><b>${esc(x.task.name)}</b><small>${esc(x.who)}</small></div><span class="tag bad">✗</span></li>`).join('')}</ul>`
+                   : `<div class="muted" style="padding:6px 0">${esc(t('missedNone'))}</div>`);
+  }
+
+  $('#choreTasks').innerHTML = DATA.chores.map(task => `
+    <li><span class="ic">${task.icon || '🧹'}</span><div class="li-main"><b>${esc(task.name)}</b></div>
+      <button class="mini" data-chorerename="${task.id}" title="${esc(t('edit'))}">✎</button>
+      <button class="mini" data-choredel="${task.id}" title="${esc(t('del'))}">✕</button></li>`).join('');
+}
+
+/* ---- Eksikler ---- */
+function renderNeeds(){
+  setBadge('needs', DATA.needs.length);
+  $('#nCount').textContent = DATA.needs.length ? `(${DATA.needs.length})` : '';
+  $('#waNeeds').hidden = !DATA.needs.length;
+  $('#nList').innerHTML = DATA.needs.length ? DATA.needs.map(x => `
+    <li>
+      <button class="btn ok sm" data-nbuy="${x.id}" title="${esc(t('bought'))}">✓</button>
+      <div class="li-main"><b>${esc(x.text)}</b><small>${x.by ? esc(fill(t('addedBy'), {x:x.by})) + ' · ' : ''}${dateStr(x.date)}</small></div>
+      <button class="mini" data-ndel="${x.id}" title="${esc(t('del'))}">✕</button>
+    </li>`).join('') : `<div class="empty">${esc(t('noNeeds'))}</div>`;
+}
+
+/* ---- Kurallar ---- */
+function renderRules(){
+  $('#rList').innerHTML = DATA.rules.length ? DATA.rules.map((r, i) => `
     <li><span class="txt">${esc(r.text)}</span>
+      ${i > 0 ? `<button class="mini" data-rup="${r.id}" title="${esc(t('moveUp'))}">↑</button>` : ''}
       <button class="mini" data-redit="${r.id}" title="${esc(t('edit'))}">✎</button>
       <button class="mini" data-rdel="${r.id}" title="${esc(t('del'))}">✕</button></li>`).join('')
     : `<div class="empty">${esc(t('noRules'))}</div>`;
 }
 
-/* ============ tabs / language ============ */
-function setTab(name){
-  ['shop','settle','rules'].forEach(n => $('#tab-' + n).hidden = n !== name);
-  document.querySelectorAll('nav.tabs button').forEach(b => b.classList.toggle('on', b.dataset.tab === name));
-  LS.set('ev.tab', name);
-}
-document.querySelectorAll('nav.tabs button').forEach(b => b.onclick = () => setTab(b.dataset.tab));
+/* ============ genel tıklamalar ============ */
 document.querySelectorAll('#langSeg button').forEach(b => b.onclick = () => {
   lang = b.dataset.lang; LS.set('ev.lang', lang); renderStatic(); render();
 });
+document.addEventListener('click', e => {
+  if(e.target.id === 'bannerBtn') openSettings();
+  const go = e.target.closest('[data-go]');
+  if(go){ setTab(go.dataset.go); window.scrollTo({top:0}); }
+});
+function openWhatsApp(text){
+  const url = 'https://wa.me/?text=' + encodeURIComponent(text);
+  const w = window.open(url, '_blank');
+  if(!w) location.href = url;
+}
+const siteUrl = () => /^https?:/.test(location.protocol) ? '\n\n🔗 ' + location.origin + location.pathname : '';
 
-/* ============ purchases ============ */
+/* ============ Ev: duyuru + sınav ============ */
+$('#noteForm').onsubmit = async e => {
+  e.preventDefault();
+  const text = $('#noteText').value.trim(); if(!text) return;
+  const by = me() || '?';
+  if(await mutate('Duyuru: ' + text.slice(0, 40), d => {
+    d.notes.push({id:uid(), text, by, date:new Date().toISOString()});
+    d.notes = d.notes.slice(-60);
+  })){ $('#noteText').value = ''; toast(t('added')); }
+};
+$('#noteList').addEventListener('click', async e => {
+  const b = e.target.closest('[data-notedel]'); if(!b) return;
+  if(!confirm(t('confirmDelNote'))) return;
+  if(await mutate('Duyuru silindi', d => { d.notes = d.notes.filter(n => n.id !== b.dataset.notedel); })) toast(t('deleted'));
+});
+$('#examForm').onsubmit = async e => {
+  e.preventDefault();
+  const who = $('#examWho').value, name = $('#examName').value.trim(), date = $('#examDate').value;
+  if(!who || !name || !date) return toast(t('errExam'), true);
+  if(dayNum(date) < dayNum(todayStr())) return toast(t('errExamPast'), true);
+  if(await mutate(`Sınav eklendi: ${who} – ${name}`, d => {
+    const cut = dayNum(todayStr()) - 3;
+    d.exams = d.exams.filter(x => dayNum(x.date) >= cut);
+    d.exams.push({id:uid(), who, name, date});
+  })){ $('#examName').value = ''; $('#examDate').value = ''; toast(t('added')); }
+};
+$('#examList').addEventListener('click', async e => {
+  const b = e.target.closest('[data-examdel]'); if(!b) return;
+  if(!confirm(fill(t('confirmDelete'), {x:(DATA.exams.find(x => x.id === b.dataset.examdel) || {}).name || ''}))) return;
+  if(await mutate('Sınav silindi', d => { d.exams = d.exams.filter(x => x.id !== b.dataset.examdel); })) toast(t('deleted'));
+});
+
+/* ============ alışverişler ============ */
 $('#payers').addEventListener('click', e => {
   const b = e.target.closest('button[data-p]'); if(!b) return;
   payer = b.dataset.p; renderPayers();
 });
+$('#splitChips').addEventListener('click', e => {
+  const b = e.target.closest('button[data-s]'); if(!b) return;
+  const p = b.dataset.s;
+  splitSel.has(p) ? splitSel.delete(p) : splitSel.add(p);
+  renderSplit();
+});
 function resetForm(){
   editingId = null;
   $('#pDesc').value = ''; $('#pAmt').value = '';
-  payer = LS.get('ev.me', '') || '';
+  payer = me() || '';
+  splitSel = new Set(PEOPLE);
   $('#pCancel').hidden = true;
   renderStatic();
 }
@@ -791,14 +1279,18 @@ $('#pForm').onsubmit = async e => {
   if(!desc) return toast(t('errDesc'), true);
   if(!amount) return toast(t('errAmount'), true);
   if(!payer) return toast(t('errPayer'), true);
+  if(!splitSel.size) return toast(t('errSplit'), true);
+  const split = splitSel.size === PEOPLE.length ? null : PEOPLE.filter(p => splitSel.has(p));
   const id = editingId;
   $('#pSubmit').disabled = true;
-  const ok = await mutate(id ? `Düzenlendi: ${desc}` : `Eklendi: ${desc} ${(amount / 100).toFixed(2)} TL`, d => {
+  const ok = await mutate(id ? `Düzenlendi: ${desc}` : `Eklendi: ${desc} ${(amount / 100).toFixed(2)} TL${split ? ' [' + split.join(', ') + ']' : ''}`, d => {
     if(id){
       const p = d.purchases.find(x => x.id === id);
-      if(p){ p.desc = desc; p.amount = amount; p.payer = payer; return; }
+      if(p){ p.desc = desc; p.amount = amount; p.payer = payer; if(split) p.split = split; else delete p.split; return; }
     }
-    d.purchases.push({id:uid(), desc, amount, payer, date:new Date().toISOString()});
+    const np = {id:uid(), desc, amount, payer, date:new Date().toISOString()};
+    if(split) np.split = split;
+    d.purchases.push(np);
   });
   $('#pSubmit').disabled = false;
   if(ok){ toast(t(id ? 'saved' : 'added')); resetForm(); }
@@ -807,9 +1299,9 @@ $('#pList').addEventListener('click', async e => {
   const ed = e.target.closest('[data-edit]'), del = e.target.closest('[data-del]');
   if(ed){
     const p = DATA.purchases.find(x => x.id === ed.dataset.edit); if(!p) return;
-    editingId = p.id; payer = p.payer;
+    editingId = p.id; payer = p.payer; splitSel = new Set(splitOf(p));
     $('#pDesc').value = p.desc;
-    $('#pAmt').value = (p.amount / 100).toFixed(2).replace('.', lang === 'tr' ? ',' : '.');
+    $('#pAmt').value = amountInput(p.amount);
     $('#pCancel').hidden = false; renderStatic();
     $('#pForm').scrollIntoView({behavior:'smooth', block:'center'});
   }
@@ -820,7 +1312,7 @@ $('#pList').addEventListener('click', async e => {
   }
 });
 
-/* ============ settle ============ */
+/* ============ hesaplaşma ============ */
 $('#transfers').addEventListener('click', async e => {
   if(e.target.closest('#closeBtn')){
     if(!confirm(t('confirmClose'))) return;
@@ -858,14 +1350,113 @@ $('#payList').addEventListener('click', async e => {
   if(!confirm(fill(t('confirmDelPay'), {from:x.from, to:x.to, amt:money(x.amount)}))) return;
   if(await mutate(`Ödeme kaydı silindi: ${x.from} → ${x.to}`, d => { d.payments = d.payments.filter(y => y.id !== x.id); })) toast(t('deleted'));
 });
+$('#waSettle').onclick = () => {
+  const c = compute(DATA);
+  let txt = fill(t('waSettleHead'), {d:dateStr(new Date().toISOString())}) + '\n' + fill(t('waTotal'), {x:money(c.total)}) + '\n\n';
+  txt += c.transfers.length ? t('waWho') + '\n' + c.transfers.map(x => `• ${x.from} → ${x.to}: ${money(x.amount)}`).join('\n') : t('waAllEven');
+  openWhatsApp(txt + siteUrl());
+};
+$('#mPrev').onclick = () => { statsOff = Math.min(12, statsOff + 1); renderStats(); };
+$('#mNext').onclick = () => { statsOff = Math.max(0, statsOff - 1); renderStats(); };
 
-/* ============ rules ============ */
+/* ============ nöbet ============ */
+$('#choreList').addEventListener('click', async e => {
+  const done = e.target.closest('[data-choredone]'), undo = e.target.closest('[data-choreundo]');
+  const w = curWeek();
+  if(done){
+    const m = me(); if(!m) return toast(t('needMe'), true);
+    const id = done.dataset.choredone, task = DATA.chores.find(x => x.id === id);
+    if(await mutate(`Nöbet yapıldı: ${task ? task.name : id}`, d => {
+      if(choreLogFor(d, id, w)) throw errCode('gone');
+      d.choreLog.push({id:uid(), task:id, week:w, by:m, date:new Date().toISOString()});
+      d.choreLog = d.choreLog.filter(l => l.week >= w - 12);
+    })) toast(t('choreMarked'));
+  }
+  if(undo){
+    if(!confirm(t('confirmUndoChore'))) return;
+    const id = undo.dataset.choreundo;
+    if(await mutate('Nöbet işareti kaldırıldı', d => { d.choreLog = d.choreLog.filter(l => !(l.task === id && l.week === w)); })) toast(t('deleted'));
+  }
+});
+$('#choreList').addEventListener('change', async e => {
+  const sel = e.target.closest('[data-choreassign]'); if(!sel) return;
+  const id = sel.dataset.choreassign, who = sel.value, w = curWeek();
+  if(!(await mutate(`Nöbet değişti: ${who}`, d => {
+    const i = d.chores.findIndex(x => x.id === id); if(i < 0) return;
+    d.chores[i].shift = mod(PEOPLE.indexOf(who) - i - w, PEOPLE.length);
+  }))) render();
+  else toast(t('saved'));
+});
+$('#choreForm').onsubmit = async e => {
+  e.preventDefault();
+  const name = $('#choreName').value.trim(); if(!name) return;
+  if(await mutate(`Görev eklendi: ${name}`, d => { d.chores.push({id:uid(), name, icon:'🧹'}); })){ $('#choreName').value = ''; toast(t('added')); }
+};
+$('#choreTasks').addEventListener('click', async e => {
+  const rn = e.target.closest('[data-chorerename]'), del = e.target.closest('[data-choredel]');
+  if(rn){
+    const task = DATA.chores.find(x => x.id === rn.dataset.chorerename); if(!task) return;
+    const nt = prompt(t('edit'), task.name);
+    if(nt === null || !nt.trim() || nt.trim() === task.name) return;
+    if(await mutate('Görev düzenlendi', d => { const x = d.chores.find(y => y.id === task.id); if(x) x.name = nt.trim(); })) toast(t('saved'));
+  }
+  if(del){
+    const task = DATA.chores.find(x => x.id === del.dataset.choredel); if(!task) return;
+    if(!confirm(fill(t('confirmDelChore'), {x:task.name}))) return;
+    if(await mutate(`Görev silindi: ${task.name}`, d => { d.chores = d.chores.filter(x => x.id !== task.id); })) toast(t('deleted'));
+  }
+});
+
+/* ============ eksikler ============ */
+$('#nForm').onsubmit = async e => {
+  e.preventDefault();
+  const text = $('#nText').value.trim(); if(!text) return;
+  const by = me();
+  if(await mutate(`Eksik eklendi: ${text}`, d => { d.needs.push({id:uid(), text, by, date:new Date().toISOString()}); })){
+    $('#nText').value = ''; toast(t('added'));
+  }
+};
+$('#nList').addEventListener('click', async e => {
+  const buy = e.target.closest('[data-nbuy]'), del = e.target.closest('[data-ndel]');
+  if(del){
+    const x = DATA.needs.find(y => y.id === del.dataset.ndel); if(!x) return;
+    if(await mutate(`Eksik silindi: ${x.text}`, d => { d.needs = d.needs.filter(y => y.id !== x.id); })) toast(t('deleted'));
+  }
+  if(buy){
+    const x = DATA.needs.find(y => y.id === buy.dataset.nbuy); if(!x) return;
+    const ans = prompt(fill(t('boughtPrompt'), {x:x.text}), '');
+    if(ans === null) return;
+    let amount = 0;
+    if(ans.trim()){
+      amount = parseAmount(ans);
+      if(!amount) return toast(t('errAmount'), true);
+      if(!me()) return toast(t('needMe'), true);
+    }
+    const m = me();
+    const ok = await mutate(`Alındı: ${x.text}${amount ? ' ' + (amount / 100).toFixed(2) + ' TL' : ''}`, d => {
+      d.needs = d.needs.filter(y => y.id !== x.id);
+      if(amount) d.purchases.push({id:uid(), desc:x.text, amount, payer:m, date:new Date().toISOString(), kind:'need'});
+    });
+    if(ok) toast(t(amount ? 'boughtAdded' : 'bought'));
+  }
+});
+$('#waNeeds').onclick = () => openWhatsApp(t('waNeedsHead') + '\n' + DATA.needs.map(x => '• ' + x.text).join('\n') + siteUrl());
+
+/* ============ kurallar ============ */
 $('#rForm').onsubmit = async e => {
   e.preventDefault();
   const text = $('#rText').value.trim(); if(!text) return;
   if(await mutate('Kural eklendi', d => { d.rules.push({id:uid(), text}); })){ $('#rText').value = ''; toast(t('added')); }
 };
 $('#rList').addEventListener('click', async e => {
+  const up = e.target.closest('[data-rup]');
+  if(up){
+    await mutate('Kural sırası değişti', d => {
+      const i = d.rules.findIndex(r => r.id === up.dataset.rup);
+      if(i > 0) [d.rules[i - 1], d.rules[i]] = [d.rules[i], d.rules[i - 1]];
+    });
+    return;
+  }
   const ed = e.target.closest('[data-redit]'), del = e.target.closest('[data-rdel]');
   if(ed){
     const r = DATA.rules.find(x => x.id === ed.dataset.redit); if(!r) return;
@@ -879,10 +1470,10 @@ $('#rList').addEventListener('click', async e => {
   }
 });
 
-/* ============ settings ============ */
+/* ============ ayarlar ============ */
 function openSettings(){
-  const me = LS.get('ev.me', '');
-  $('#sMe').innerHTML = `<option value="">${esc(t('meNone'))}</option>` + PEOPLE.map(p => `<option ${p === me ? 'selected' : ''}>${esc(p)}</option>`).join('');
+  const m = me();
+  $('#sMe').innerHTML = `<option value="">${esc(t('meNone'))}</option>` + PEOPLE.map(p => `<option ${p === m ? 'selected' : ''}>${esc(p)}</option>`).join('');
   $('#sToken').value = token();
   $('#sHouse').value = '';
   const hasVault = !!(DATA && DATA.vault);
@@ -895,20 +1486,19 @@ function openSettings(){
   if(!$('#settings').open) $('#settings').showModal();
 }
 $('#openSettings').onclick = openSettings;
-document.addEventListener('click', e => { if(e.target.id === 'bannerBtn') openSettings(); });
 $('#settings').addEventListener('close', async () => {
   const dlg = $('#settings'), rv = dlg.returnValue;
   dlg.returnValue = '';
   if(rv !== 'save') return;
-  const me = $('#sMe').value, tk = $('#sToken').value.trim(), hp = $('#sHouse').value,
+  const m = $('#sMe').value, tk = $('#sToken').value.trim(), hp = $('#sHouse').value,
         o = $('#sOwner').value.trim(), r = $('#sRepo').value.trim();
   const tokenChanged = tk !== token();
-  me ? LS.set('ev.me', me) : LS.del('ev.me');
+  m ? LS.set('ev.me', m) : LS.del('ev.me');
   tk ? LS.set('ev.token', tk) : LS.del('ev.token');
   o ? LS.set('ev.owner', o) : LS.del('ev.owner');
   r ? LS.set('ev.repo', r) : LS.del('ev.repo');
-  if(!editingId){ payer = me || payer; renderPayers(); }
-  render();
+  if(!editingId){ payer = m || payer; }
+  renderStatic(); render();
 
   if(!hp){ toast(t('saved')); refresh(); return; }
   if(hp.length < 6){ toast(t('shortPass'), true); return; }
@@ -919,7 +1509,6 @@ $('#settings').addEventListener('close', async () => {
     try{ const fresh = await store().load(); DATA = fresh.data; vault = DATA.vault; }catch{}
   }
   if(tk && (tokenChanged || !vault)){
-    // Token sahibi: ev şifresini belirle / değiştir
     const sealed = await sealToken(tk, hp);
     if(await mutate('Ev şifresi belirlendi', d => { d.vault = sealed; })) toast(t('vaultSet'));
     return;
@@ -933,11 +1522,11 @@ $('#settings').addEventListener('close', async () => {
   }
 });
 
-/* ============ start ============ */
-payer = LS.get('ev.me', '') || '';
+/* ============ başlat ============ */
+payer = me() || '';
 try{ navigator.storage && navigator.storage.persist && navigator.storage.persist(); }catch{}
 renderStatic();
-setTab(LS.get('ev.tab', 'shop'));
+setTab(LS.get('ev.tab', 'home'));
 refresh();
 document.addEventListener('visibilitychange', () => { if(document.visibilityState === 'visible') refresh(); });
 setInterval(() => {
