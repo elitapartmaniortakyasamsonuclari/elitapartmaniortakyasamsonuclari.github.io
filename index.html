@@ -255,10 +255,18 @@ dialog::backdrop{background:rgba(0,0,0,.45)}
       <select id="sMe"></select>
       <p class="hint" data-i18n="meHint"></p>
 
-      <h3 data-i18n="ghSection">GitHub bağlantısı</h3>
-      <label class="f" for="sToken" data-i18n="token">Erişim anahtarı (token)</label>
-      <input type="password" id="sToken" placeholder="github_pat_…" autocomplete="off" spellcheck="false">
-      <p class="hint"><span data-i18n="tokenHint"></span> <a href="https://github.com/settings/personal-access-tokens/new" target="_blank" rel="noopener" data-i18n="tokenHow">Token oluştur</a></p>
+      <h3 data-i18n="housePass">Ev şifresi</h3>
+      <input type="password" id="sHouse" autocomplete="current-password" spellcheck="false">
+      <p class="hint" id="houseHint"></p>
+
+      <details style="margin-top:14px" id="setupBox">
+        <summary class="muted" style="cursor:pointer;font-size:14px" data-i18n="setupSection">Kurulum (sadece bir kişi yapar)</summary>
+        <div style="margin-top:10px">
+          <label class="f" for="sToken" data-i18n="token">Erişim anahtarı (token)</label>
+          <input type="password" id="sToken" placeholder="github_pat_…" autocomplete="off" spellcheck="false">
+          <p class="hint"><span data-i18n="setupHint"></span> <a href="https://github.com/settings/personal-access-tokens/new" target="_blank" rel="noopener" data-i18n="tokenHow">Token oluştur</a></p>
+        </div>
+      </details>
 
       <details style="margin-top:14px">
         <summary class="muted" style="cursor:pointer;font-size:14px" data-i18n="advanced">Gelişmiş</summary>
@@ -324,15 +332,22 @@ const I18N = {
     detected:'Otomatik bulunan: {x}', notDetected:'Adresten repo bulunamadı.',
     saved:'Kaydedildi ✔', added:'Eklendi ✔', deleted:'Silindi',
     localMode:'Önizleme modu: veriler sadece bu tarayıcıda. GitHub Pages’e yükleyince herkes aynı listeyi görür.',
-    readOnly:'Şu an sadece görüntüleme modundasın. Ekleme/silme için', readOnlyBtn:'erişim anahtarını gir',
-    errNoToken:'Değişiklik yapmak için önce ⚙ Ayarlar’dan erişim anahtarını gir.',
+    readOnly:'Şu an sadece görüntüleme modundasın. Ekleme/silme için', readOnlyBtn:'ev şifresini gir',
+    errNoToken:'Değişiklik yapmak için önce ⚙ Ayarlar’dan ev şifresini gir.',
     errAuth:'Token geçersiz ya da yetkisi yok (Contents: Read and write gerekli).',
     errNotFound:'Repo bulunamadı. Ayarlar › Gelişmiş’teki kullanıcı/repo adını kontrol et.',
     errRate:'GitHub istek sınırı doldu, biraz sonra tekrar dene.',
     errNet:'Bağlantı hatası, internetini kontrol et.', errConflict:'Aynı anda başka biri de değiştirdi, tekrar dene.',
     errAmount:'Geçerli bir tutar gir (ör. 249,90).', errDesc:'Ne alındığını yaz.', errPayer:'Kimin ödediğini seç.',
     errGone:'Bu transfer zaten işaretlenmiş.', errOther:'Bir hata oluştu ({x}).',
-    syncOk:'Güncel', syncBusy:'Kaydediliyor…', syncErr:'Hata'
+    syncOk:'Güncel', syncBusy:'Kaydediliyor…', syncErr:'Hata',
+    housePass:'Ev şifresi', setupSection:'Kurulum (sadece bir kişi yapar)',
+    houseHintUnlock:'Evdekilerin bildiği ortak şifreyi yaz, Kaydet’e bas. Bir kere yeterli.',
+    houseHintOk:'✓ Bu cihaz kayıtlı, değişiklik yapabilirsin.',
+    houseHintNoVault:'Henüz ev şifresi belirlenmedi. Token’ı olan kişi aşağıdaki Kurulum kısmına token’ı, buraya da yeni ev şifresini yazıp Kaydet’e bassın.',
+    setupHint:'Token’ı yapıştır, yukarıya bir ev şifresi yaz ve Kaydet. Token şifrelenip saklanır; diğerleri sadece ev şifresini girer.',
+    wrongPass:'Ev şifresi yanlış.', unlocked:'Hoş geldin! Bu cihaz artık kayıtlı ✔', vaultSet:'Ev şifresi belirlendi ✔ Diğerleri artık sadece bu şifreyi girecek.',
+    shortPass:'Ev şifresi en az 6 karakter olmalı.'
   },
   en:{
     appTitle:'House Expenses', tabShop:'Purchases', tabSettle:'Settle up', tabRules:'House Rules',
@@ -359,15 +374,22 @@ const I18N = {
     detected:'Auto-detected: {x}', notDetected:'Could not detect the repo from the address.',
     saved:'Saved ✔', added:'Added ✔', deleted:'Deleted',
     localMode:'Preview mode: data lives only in this browser. Once on GitHub Pages, everyone shares the same list.',
-    readOnly:'You are in view-only mode. To add or delete,', readOnlyBtn:'enter the access token',
-    errNoToken:'To make changes, enter the access token in ⚙ Settings first.',
+    readOnly:'You are in view-only mode. To add or delete,', readOnlyBtn:'enter the house password',
+    errNoToken:'To make changes, enter the house password in ⚙ Settings first.',
     errAuth:'Token is invalid or lacks permission (Contents: Read and write needed).',
     errNotFound:'Repository not found. Check user/repo in Settings › Advanced.',
     errRate:'GitHub rate limit reached, try again shortly.',
     errNet:'Network error, check your connection.', errConflict:'Someone else changed it at the same time, try again.',
     errAmount:'Enter a valid amount (e.g. 249.90).', errDesc:'Describe what was bought.', errPayer:'Choose who paid.',
     errGone:'This transfer was already marked.', errOther:'Something went wrong ({x}).',
-    syncOk:'Up to date', syncBusy:'Saving…', syncErr:'Error'
+    syncOk:'Up to date', syncBusy:'Saving…', syncErr:'Error',
+    housePass:'House password', setupSection:'Setup (done by one person only)',
+    houseHintUnlock:'Type the shared house password and press Save. Once is enough.',
+    houseHintOk:'✓ This device is registered, you can make changes.',
+    houseHintNoVault:'No house password yet. Whoever has the token: paste it under Setup below, type a new house password here, and Save.',
+    setupHint:'Paste the token, type a house password above and Save. The token is stored encrypted; others only enter the house password.',
+    wrongPass:'Wrong house password.', unlocked:'Welcome! This device is now registered ✔', vaultSet:'House password set ✔ Others now just enter this password.',
+    shortPass:'House password must be at least 6 characters.'
   }
 };
 
@@ -413,6 +435,24 @@ function b64encode(str){
 function b64decode(b64){
   const bin = atob(b64.replace(/\s/g, ''));
   return new TextDecoder().decode(Uint8Array.from(bin, c => c.charCodeAt(0)));
+}
+
+/* ============ ev şifresi: token'ı şifreleyip veride saklar ============ */
+const bytesToB64 = u8 => { let s = ''; u8.forEach(b => s += String.fromCharCode(b)); return btoa(s); };
+const b64ToBytes = b => Uint8Array.from(atob(b), c => c.charCodeAt(0));
+async function houseKey(pass, salt){
+  const base = await crypto.subtle.importKey('raw', new TextEncoder().encode(pass), 'PBKDF2', false, ['deriveKey']);
+  return crypto.subtle.deriveKey({name:'PBKDF2', salt, iterations:310000, hash:'SHA-256'}, base, {name:'AES-GCM', length:256}, false, ['encrypt','decrypt']);
+}
+async function sealToken(tok, pass){
+  const salt = crypto.getRandomValues(new Uint8Array(16)), iv = crypto.getRandomValues(new Uint8Array(12));
+  const ct = await crypto.subtle.encrypt({name:'AES-GCM', iv}, await houseKey(pass, salt), new TextEncoder().encode(tok));
+  return {v:1, salt:bytesToB64(salt), iv:bytesToB64(iv), ct:bytesToB64(new Uint8Array(ct))};
+}
+async function openVault(vault, pass){
+  const key = await houseKey(pass, b64ToBytes(vault.salt));
+  const pt = await crypto.subtle.decrypt({name:'AES-GCM', iv:b64ToBytes(vault.iv)}, key, b64ToBytes(vault.ct));
+  return new TextDecoder().decode(pt);
 }
 
 /* ============ data ============ */
@@ -550,10 +590,10 @@ function toast(msg, isErr){
   el.textContent = msg; el.className = 'toast show' + (isErr ? ' err' : '');
   clearTimeout(toast._t); toast._t = setTimeout(() => el.className = 'toast', isErr ? 4200 : 2200);
 }
-function showErr(e){
+function showErr(e, quiet){
   const map = {notoken:'errNoToken', auth:'errAuth', notfound:'errNotFound', rate:'errRate', net:'errNet', conflict:'errConflict', gone:'errGone'};
   toast(map[e.code] ? t(map[e.code]) : fill(t('errOther'), {x:e.extra || e.message}), true);
-  if(e.code === 'notoken' || e.code === 'auth') openSettings();
+  if(!quiet && (e.code === 'notoken' || e.code === 'auth')) openSettings();
 }
 
 async function refresh(){
@@ -563,7 +603,7 @@ async function refresh(){
     const {data} = await store().load();
     if(!busy){ DATA = data; render(); }
     setSync('ok');
-  }catch(e){ setSync('err'); if(!DATA){ DATA = emptyData(); render(); } showErr(e); }
+  }catch(e){ setSync('err'); if(!DATA){ DATA = emptyData(); render(); } showErr(e, true); }
 }
 
 /* Her değişiklik: en güncel veriyi çek → uygula → kaydet. Çakışma olursa tekrar dene. */
@@ -794,6 +834,10 @@ function openSettings(){
   const me = LS.get('ev.me', '');
   $('#sMe').innerHTML = `<option value="">${esc(t('meNone'))}</option>` + PEOPLE.map(p => `<option ${p === me ? 'selected' : ''}>${esc(p)}</option>`).join('');
   $('#sToken').value = token();
+  $('#sHouse').value = '';
+  const hasVault = !!(DATA && DATA.vault);
+  $('#houseHint').textContent = t(token() ? 'houseHintOk' : hasVault ? 'houseHintUnlock' : 'houseHintNoVault');
+  $('#setupBox').open = !hasVault && store() === github;
   $('#sOwner').value = LS.get('ev.owner', '');
   $('#sRepo').value = LS.get('ev.repo', '');
   const det = detectRepo();
@@ -802,20 +846,46 @@ function openSettings(){
 }
 $('#openSettings').onclick = openSettings;
 document.addEventListener('click', e => { if(e.target.id === 'bannerBtn') openSettings(); });
-$('#settings').addEventListener('close', () => {
-  if($('#settings').returnValue !== 'save') return;
-  const me = $('#sMe').value, tk = $('#sToken').value.trim(), o = $('#sOwner').value.trim(), r = $('#sRepo').value.trim();
+$('#settings').addEventListener('close', async () => {
+  const dlg = $('#settings'), rv = dlg.returnValue;
+  dlg.returnValue = '';
+  if(rv !== 'save') return;
+  const me = $('#sMe').value, tk = $('#sToken').value.trim(), hp = $('#sHouse').value,
+        o = $('#sOwner').value.trim(), r = $('#sRepo').value.trim();
+  const tokenChanged = tk !== token();
   me ? LS.set('ev.me', me) : LS.del('ev.me');
   tk ? LS.set('ev.token', tk) : LS.del('ev.token');
   o ? LS.set('ev.owner', o) : LS.del('ev.owner');
   r ? LS.set('ev.repo', r) : LS.del('ev.repo');
   if(!editingId){ payer = me || payer; renderPayers(); }
-  toast(t('saved'));
-  refresh();
+  render();
+
+  if(!hp){ toast(t('saved')); refresh(); return; }
+  if(hp.length < 6){ toast(t('shortPass'), true); return; }
+
+  setSync('busy');
+  let vault = DATA && DATA.vault;
+  if(!vault){
+    try{ const fresh = await store().load(); DATA = fresh.data; vault = DATA.vault; }catch{}
+  }
+  if(tk && (tokenChanged || !vault)){
+    // Token sahibi: ev şifresini belirle / değiştir
+    const sealed = await sealToken(tk, hp);
+    if(await mutate('Ev şifresi belirlendi', d => { d.vault = sealed; })) toast(t('vaultSet'));
+    return;
+  }
+  if(!vault){ setSync('ok'); toast(t('houseHintNoVault'), true); return; }
+  try{
+    LS.set('ev.token', await openVault(vault, hp));
+    setSync('ok'); render(); toast(t('unlocked')); refresh();
+  }catch{
+    setSync('ok'); toast(t('wrongPass'), true);
+  }
 });
 
 /* ============ start ============ */
 payer = LS.get('ev.me', '') || '';
+try{ navigator.storage && navigator.storage.persist && navigator.storage.persist(); }catch{}
 renderStatic();
 setTab(LS.get('ev.tab', 'shop'));
 refresh();
