@@ -129,7 +129,14 @@
   },
   "needs": [],
   "notes": [],
-  "exams": [],
+  "exams": [
+    {
+      "id": "mvbd3g3r35wp9",
+      "who": "Efe",
+      "name": "MMP",
+      "date": "2026-11-05"
+    }
+  ],
   "ledger": [],
   "choreLog": [],
   "chores": [
