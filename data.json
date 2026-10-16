@@ -1,0 +1,36 @@
+{
+  "version": 1,
+  "purchases": [],
+  "payments": [],
+  "rules": [
+    {
+      "id": "mvay6gnhvypb4",
+      "text": "Bulaşıklar aynı gün yıkanır, lavaboda bekletilmez."
+    },
+    {
+      "id": "mvay6gnh2j9r0",
+      "text": "Ortak alanlar (mutfak, banyo, salon) haftalık sırayla temizlenir."
+    },
+    {
+      "id": "mvay6gnh59gc3",
+      "text": "Çöpü dolduran çıkarır."
+    },
+    {
+      "id": "mvay6gnhely8f",
+      "text": "Hafta içi 00:00’dan sonra sessizlik."
+    },
+    {
+      "id": "mvay6gnh40383",
+      "text": "Misafir gelecekse önceden gruba haber verilir."
+    },
+    {
+      "id": "mvay6gnhk5z7o",
+      "text": "Ortak alışveriş bu siteye girilir, borçlar 1 hafta içinde ödenir."
+    },
+    {
+      "id": "mvay6gnh2tty9",
+      "text": "Hafta içi 00:00’dan sonra sessizlik."
+    }
+  ],
+  "history": []
+}
