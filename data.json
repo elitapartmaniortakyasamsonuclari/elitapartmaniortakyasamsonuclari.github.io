@@ -147,7 +147,8 @@
     {
       "id": "salon",
       "name": "Salon & koridor",
-      "icon": "🛋️"
+      "icon": "🛋️",
+      "shift": 2
     },
     {
       "id": "cop",
