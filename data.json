@@ -196,7 +196,8 @@
     {
       "id": "mvbdstzwtg977",
       "name": "Balkon",
-      "icon": "🧹"
+      "icon": "🧹",
+      "shift": 1
     }
   ]
 }
