@@ -56,6 +56,13 @@
       "to": "Efe",
       "amount": 1250,
       "date": "2026-10-16T20:02:13.029Z"
+    },
+    {
+      "id": "mvbe98wovgqul",
+      "from": "Alper",
+      "to": "Efe",
+      "amount": 6250,
+      "date": "2026-10-16T20:02:16.536Z"
     }
   ],
   "rules": [
