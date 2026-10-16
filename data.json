@@ -9,7 +9,15 @@
       "date": "2026-10-16T12:46:17.733Z"
     }
   ],
-  "payments": [],
+  "payments": [
+    {
+      "id": "mvaz1pk3oj18p",
+      "from": "Alper",
+      "to": "Yekta",
+      "amount": 21750,
+      "date": "2026-10-16T12:56:30.627Z"
+    }
+  ],
   "rules": [
     {
       "id": "mvay6gnhvypb4",
