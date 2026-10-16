@@ -1,77 +1,7 @@
 {
   "version": 1,
-  "purchases": [
-    {
-      "id": "mvbe6wez4bx7x",
-      "desc": "Kağıt havlu çöp poşet",
-      "amount": 80000,
-      "payer": "Furkan",
-      "date": "2026-10-16T20:00:27.035Z"
-    },
-    {
-      "id": "mvbe72ezpfexs",
-      "desc": "İki şey",
-      "amount": 87000,
-      "payer": "Yekta",
-      "date": "2026-10-16T20:00:34.811Z"
-    },
-    {
-      "id": "mvbe7jo6jeyik",
-      "desc": "filtre kahve 2 paket",
-      "amount": 45000,
-      "payer": "Efe",
-      "date": "2026-10-16T20:00:57.174Z",
-      "split": [
-        "Efe",
-        "Furkan",
-        "Yekta"
-      ]
-    },
-    {
-      "id": "mvbe92ks7dbnu",
-      "desc": "Havlu kağıt sandığım tuvalet kağıdı 24",
-      "amount": 25000,
-      "payer": "Efe",
-      "date": "2026-10-16T20:02:08.332Z"
-    }
-  ],
-  "payments": [
-    {
-      "id": "mvbe7q96e448a",
-      "from": "Alper",
-      "to": "Yekta",
-      "amount": 21750,
-      "date": "2026-10-16T20:01:05.706Z"
-    },
-    {
-      "id": "mvbe7tzb6ctyr",
-      "from": "Furkan",
-      "to": "Yekta",
-      "amount": 1750,
-      "date": "2026-10-16T20:01:10.535Z"
-    },
-    {
-      "id": "mvbe9679y3k5a",
-      "from": "Furkan",
-      "to": "Efe",
-      "amount": 1250,
-      "date": "2026-10-16T20:02:13.029Z"
-    },
-    {
-      "id": "mvbe98wovgqul",
-      "from": "Alper",
-      "to": "Efe",
-      "amount": 6250,
-      "date": "2026-10-16T20:02:16.536Z"
-    },
-    {
-      "id": "mvbe9bompabaw",
-      "from": "Efe",
-      "to": "Yekta",
-      "amount": 500,
-      "date": "2026-10-16T20:02:20.134Z"
-    }
-  ],
+  "purchases": [],
+  "payments": [],
   "rules": [
     {
       "id": "mvbcxs5xeonyd",
@@ -107,6 +37,13 @@
     }
   ],
   "history": [
+    {
+      "id": "mvbfvelcmwkzh",
+      "closedAt": "2026-10-16T20:47:29.952Z",
+      "total": 237000,
+      "per": 59250,
+      "count": 4
+    },
     {
       "id": "mvbe61rtaqq12",
       "closedAt": "2026-10-16T19:59:47.321Z",
@@ -211,6 +148,35 @@
         "Yekta"
       ],
       "date": "2026-10-16T19:59:28.132Z"
+    },
+    {
+      "desc": "Kağıt havlu çöp poşet",
+      "amount": 80000,
+      "payer": "Furkan",
+      "date": "2026-10-16T20:00:27.035Z"
+    },
+    {
+      "desc": "İki şey",
+      "amount": 87000,
+      "payer": "Yekta",
+      "date": "2026-10-16T20:00:34.811Z"
+    },
+    {
+      "desc": "filtre kahve 2 paket",
+      "amount": 45000,
+      "payer": "Efe",
+      "split": [
+        "Efe",
+        "Furkan",
+        "Yekta"
+      ],
+      "date": "2026-10-16T20:00:57.174Z"
+    },
+    {
+      "desc": "Havlu kağıt sandığım tuvalet kağıdı 24",
+      "amount": 25000,
+      "payer": "Efe",
+      "date": "2026-10-16T20:02:08.332Z"
     }
   ],
   "choreLog": [
