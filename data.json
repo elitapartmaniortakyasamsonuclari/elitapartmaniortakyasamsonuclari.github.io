@@ -1,6 +1,14 @@
 {
   "version": 1,
-  "purchases": [],
+  "purchases": [
+    {
+      "id": "mvb0wyxb66q1g",
+      "desc": "İki şey",
+      "amount": 87000,
+      "payer": "Yekta",
+      "date": "2026-10-16T13:48:48.719Z"
+    }
+  ],
   "payments": [],
   "rules": [
     {
