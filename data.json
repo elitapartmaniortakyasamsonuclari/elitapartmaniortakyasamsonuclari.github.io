@@ -58,6 +58,13 @@
       "to": "Yekta",
       "amount": 2750,
       "date": "2026-10-16T18:54:14.624Z"
+    },
+    {
+      "id": "mvbbu2oa3inko",
+      "from": "Alper",
+      "to": "Efe",
+      "amount": 19000,
+      "date": "2026-10-16T18:54:29.386Z"
     }
   ],
   "rules": [
