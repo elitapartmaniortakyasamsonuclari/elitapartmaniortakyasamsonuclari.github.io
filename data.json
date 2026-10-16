@@ -69,6 +69,10 @@
   ],
   "rules": [
     {
+      "id": "mvbcxs5xeonyd",
+      "text": "HERKES KENDİ ARKASINI TOPLAR"
+    },
+    {
       "id": "mvay6gnhvypb4",
       "text": "Bulaşıklar aynı gün yıkanır, lavaboda bekletilmez."
     },
@@ -122,5 +126,33 @@
     "salt": "fb8HkOP5H9XvetKILWEzvQ==",
     "iv": "XegOWClBFSYRZPZA",
     "ct": "gjDOHnG1+JZ0mm5kUnjOfWoX3y4CdK3zb2FnIYzYtqd/67JU46TXIaQddKrgWoSzFI5DAl4V35n91HsY9qg+38WR3owKlM9Sd+Hmr0yKUMYdKiWKimxIYFLDhaXyF1KGJgzp+plFHQggve/rUw=="
-  }
+  },
+  "needs": [],
+  "notes": [],
+  "exams": [],
+  "ledger": [],
+  "choreLog": [],
+  "chores": [
+    {
+      "id": "mutfak",
+      "name": "Mutfak",
+      "icon": "🍳"
+    },
+    {
+      "id": "banyo",
+      "name": "Banyo & tuvalet",
+      "icon": "🚿"
+    },
+    {
+      "id": "salon",
+      "name": "Salon & koridor",
+      "icon": "🛋️"
+    },
+    {
+      "id": "cop",
+      "name": "Çöp & geri dönüşüm",
+      "icon": "🗑️"
+    }
+  ],
+  "topRuleAdded": true
 }
