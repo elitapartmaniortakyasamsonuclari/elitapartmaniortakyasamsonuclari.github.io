@@ -216,6 +216,27 @@ dialog::backdrop{background:rgba(0,0,0,.45)}
       <div id="transfers"></div>
     </div>
     <div class="card">
+      <h2 data-i18n="recordPay">Ödeme kaydet</h2>
+      <p class="muted" style="margin:-6px 0 12px;font-size:14px" data-i18n="recordPayHint"></p>
+      <form id="payForm" class="form" autocomplete="off">
+        <div>
+          <label class="f" for="payFrom" data-i18n="payFrom">Kim gönderdi?</label>
+          <select id="payFrom"></select>
+        </div>
+        <div>
+          <label class="f" for="payTo" data-i18n="payTo">Kime?</label>
+          <select id="payTo"></select>
+        </div>
+        <div class="full">
+          <label class="f" for="payAmt" data-i18n="amount">Tutar (₺)</label>
+          <input type="text" id="payAmt" inputmode="decimal" placeholder="0,00">
+        </div>
+        <div class="full actions">
+          <button class="btn ok grow" type="submit" data-i18n="recordBtn">Ödemeyi kaydet</button>
+        </div>
+      </form>
+    </div>
+    <div class="card">
       <h2 data-i18n="balances">Durum</h2>
       <div class="people" id="people"></div>
     </div>
@@ -347,7 +368,11 @@ const I18N = {
     houseHintNoVault:'Henüz ev şifresi belirlenmedi. Token’ı olan kişi aşağıdaki Kurulum kısmına token’ı, buraya da yeni ev şifresini yazıp Kaydet’e bassın.',
     setupHint:'Token’ı yapıştır, yukarıya bir ev şifresi yaz ve Kaydet. Token şifrelenip saklanır; diğerleri sadece ev şifresini girer.',
     wrongPass:'Ev şifresi yanlış.', unlocked:'Hoş geldin! Bu cihaz artık kayıtlı ✔', vaultSet:'Ev şifresi belirlendi ✔ Diğerleri artık sadece bu şifreyi girecek.',
-    shortPass:'Ev şifresi en az 6 karakter olmalı.'
+    shortPass:'Ev şifresi en az 6 karakter olmalı.',
+    recordPay:'Ödeme kaydet', recordPayHint:'Birine para attıysan buraya yaz. Sonradan biri alışveriş eklese bile ödemen kayıtlı kalır.',
+    payFrom:'Kim gönderdi?', payTo:'Kime?', recordBtn:'Ödemeyi kaydet', choose:'Seç…',
+    errSame:'Gönderen ve alan aynı kişi olamaz.', errPick:'Gönderen ve alanı seç.', payRecorded:'Ödeme kaydedildi ✔',
+    confirmDelPay:'{from} → {to} {amt} ödeme kaydı silinsin mi?'
   },
   en:{
     appTitle:'House Expenses', tabShop:'Purchases', tabSettle:'Settle up', tabRules:'House Rules',
@@ -389,7 +414,11 @@ const I18N = {
     houseHintNoVault:'No house password yet. Whoever has the token: paste it under Setup below, type a new house password here, and Save.',
     setupHint:'Paste the token, type a house password above and Save. The token is stored encrypted; others only enter the house password.',
     wrongPass:'Wrong house password.', unlocked:'Welcome! This device is now registered ✔', vaultSet:'House password set ✔ Others now just enter this password.',
-    shortPass:'House password must be at least 6 characters.'
+    shortPass:'House password must be at least 6 characters.',
+    recordPay:'Record a payment', recordPayHint:'Sent someone money? Write it here. It stays recorded even if someone adds a purchase later.',
+    payFrom:'Who sent?', payTo:'To whom?', recordBtn:'Record payment', choose:'Choose…',
+    errSame:'Sender and receiver can’t be the same person.', errPick:'Choose the sender and receiver.', payRecorded:'Payment recorded ✔',
+    confirmDelPay:'Delete the payment {from} → {to} {amt}?'
   }
 };
 
@@ -465,27 +494,29 @@ function normalize(d){
   return d;
 }
 
-/* Kişi başı pay + kim kime ne gönderir (kuruş cinsinden, yuvarlama hatası yok) */
+/* Kişi kişi hesap (kuruş cinsinden): her alışverişte herkes, alışverişi yapana kendi payını borçlanır.
+   Gönderilen paralar o kişiye olan borçtan düşülür. İki kişi arasındaki karşılıklı borçlar netleşir. */
 function compute(d){
-  const total = d.purchases.reduce((s, p) => s + (p.amount || 0), 0);
-  const n = PEOPLE.length, base = Math.floor(total / n), rem = total - base * n;
-  const paid = {}, bal = {};
-  PEOPLE.forEach(p => paid[p] = 0);
-  d.purchases.forEach(p => { if(p.payer in paid) paid[p.payer] += p.amount; });
-  PEOPLE.forEach((p, i) => bal[p] = paid[p] - (base + (i < rem ? 1 : 0)));
-  d.payments.forEach(x => { if(x.from in bal && x.to in bal){ bal[x.from] += x.amount; bal[x.to] -= x.amount; } });
+  const n = PEOPLE.length, paid = {}, owe = {}, bal = {};
+  PEOPLE.forEach(a => { paid[a] = 0; bal[a] = 0; owe[a] = {}; PEOPLE.forEach(b => owe[a][b] = 0); });
+  let total = 0;
+  d.purchases.forEach(p => {
+    if(!(p.payer in paid)) return;
+    const amt = p.amount || 0, base = Math.floor(amt / n), rem = amt - base * n;
+    total += amt; paid[p.payer] += amt;
+    PEOPLE.forEach((q, i) => { if(q !== p.payer) owe[q][p.payer] += base + (i < rem ? 1 : 0); });
+  });
+  d.payments.forEach(x => { if(x.from in owe && x.to in owe) owe[x.from][x.to] -= x.amount; });
 
-  const cred = PEOPLE.filter(p => bal[p] > 0).map(p => ({p, v:bal[p]})).sort((a, b) => b.v - a.v);
-  const debt = PEOPLE.filter(p => bal[p] < 0).map(p => ({p, v:-bal[p]})).sort((a, b) => b.v - a.v);
   const transfers = [];
-  let i = 0, j = 0;
-  while(i < debt.length && j < cred.length){
-    const a = Math.min(debt[i].v, cred[j].v);
-    if(a > 0) transfers.push({from:debt[i].p, to:cred[j].p, amount:a});
-    debt[i].v -= a; cred[j].v -= a;
-    if(debt[i].v === 0) i++;
-    if(cred[j].v === 0) j++;
-  }
+  PEOPLE.forEach((a, i) => PEOPLE.forEach((b, j) => {
+    if(j <= i) return;
+    const net = owe[a][b] - owe[b][a];
+    if(net > 0) transfers.push({from:a, to:b, amount:net});
+    if(net < 0) transfers.push({from:b, to:a, amount:-net});
+  }));
+  transfers.forEach(x => { bal[x.from] -= x.amount; bal[x.to] += x.amount; });
+  transfers.sort((x, y) => PEOPLE.indexOf(x.from) - PEOPLE.indexOf(y.from) || y.amount - x.amount);
   return { total, per: Math.round(total / n), paid, bal, transfers };
 }
 
@@ -640,6 +671,11 @@ function renderStatic(){
   $('#formTitle').textContent = t(editingId ? 'editPurchase' : 'addPurchase');
   $('#pSubmit').textContent = t(editingId ? 'update' : 'add');
   renderPayers();
+  ['#payFrom', '#payTo'].forEach(sel => {
+    const el = $(sel), keep = el.value || (sel === '#payFrom' ? LS.get('ev.me', '') : '');
+    el.innerHTML = `<option value="">${esc(t('choose'))}</option>` + PEOPLE.map(p => `<option value="${esc(p)}">${esc(p)}</option>`).join('');
+    el.value = keep;
+  });
 }
 function renderPayers(){
   $('#payers').innerHTML = PEOPLE.map(p =>
@@ -708,7 +744,7 @@ function render(){
   $('#payList').innerHTML = [...DATA.payments].reverse().map(x => `
     <li>${avatar(x.from)}<div class="li-main"><b>${esc(x.from)} → ${esc(x.to)}</b><small>${dateStr(x.date)}</small></div>
       <span class="amt">${money(x.amount)}</span>
-      <button class="mini" data-undo="${x.id}" title="${esc(t('undo'))}">↶</button></li>`).join('');
+      <button class="mini" data-undo="${x.id}" title="${esc(t('del'))}">✕</button></li>`).join('');
 
   // history
   $('#historyCard').hidden = !DATA.history.length;
@@ -795,18 +831,31 @@ $('#transfers').addEventListener('click', async e => {
   if(!confirm(fill(t('confirmSent'), {from, to, amt:money(+amt)}))) return;
   let closed = false;
   const ok = await mutate(`Gönderildi: ${from} → ${to} ${(amt / 100).toFixed(2)} TL`, d => {
-    const cur = compute(d).transfers.find(x => x.from === from && x.to === to);
-    if(!cur) throw errCode('gone');
-    d.payments.push({id:uid(), from, to, amount:cur.amount, date:new Date().toISOString()});
-    const after = compute(d);
-    if(PEOPLE.every(p => after.bal[p] === 0)){ archive(d); closed = true; }
+    // Ekranda görülen (gerçekten gönderilen) tutar kaydedilir; arada biri alışveriş eklese de değişmez.
+    if(!compute(d).transfers.some(x => x.from === from && x.to === to)) throw errCode('gone');
+    d.payments.push({id:uid(), from, to, amount:+amt, date:new Date().toISOString()});
+    if(!compute(d).transfers.length){ archive(d); closed = true; }
   });
   if(ok) toast(closed ? t('periodClosed') : '✓ ' + t('sent'));
 });
+$('#payForm').onsubmit = async e => {
+  e.preventDefault();
+  const from = $('#payFrom').value, to = $('#payTo').value, amount = parseAmount($('#payAmt').value);
+  if(!from || !to) return toast(t('errPick'), true);
+  if(from === to) return toast(t('errSame'), true);
+  if(!amount) return toast(t('errAmount'), true);
+  let closed = false;
+  const ok = await mutate(`Ödeme kaydedildi: ${from} → ${to} ${(amount / 100).toFixed(2)} TL`, d => {
+    d.payments.push({id:uid(), from, to, amount, date:new Date().toISOString()});
+    if(d.purchases.length && !compute(d).transfers.length){ archive(d); closed = true; }
+  });
+  if(ok){ $('#payAmt').value = ''; $('#payTo').value = ''; toast(closed ? t('periodClosed') : t('payRecorded')); }
+};
 $('#payList').addEventListener('click', async e => {
   const b = e.target.closest('[data-undo]'); if(!b) return;
-  if(!confirm(t('confirmUndo'))) return;
-  await mutate('Gönderim geri alındı', d => { d.payments = d.payments.filter(x => x.id !== b.dataset.undo); });
+  const x = DATA.payments.find(y => y.id === b.dataset.undo); if(!x) return;
+  if(!confirm(fill(t('confirmDelPay'), {from:x.from, to:x.to, amt:money(x.amount)}))) return;
+  if(await mutate(`Ödeme kaydı silindi: ${x.from} → ${x.to}`, d => { d.payments = d.payments.filter(y => y.id !== x.id); })) toast(t('deleted'));
 });
 
 /* ============ rules ============ */
