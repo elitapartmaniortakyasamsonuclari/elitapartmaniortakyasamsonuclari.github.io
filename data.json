@@ -40,5 +40,11 @@
       "per": 21625,
       "count": 5
     }
-  ]
+  ],
+  "vault": {
+    "v": 1,
+    "salt": "fb8HkOP5H9XvetKILWEzvQ==",
+    "iv": "XegOWClBFSYRZPZA",
+    "ct": "gjDOHnG1+JZ0mm5kUnjOfWoX3y4CdK3zb2FnIYzYtqd/67JU46TXIaQddKrgWoSzFI5DAl4V35n91HsY9qg+38WR3owKlM9Sd+Hmr0yKUMYdKiWKimxIYFLDhaXyF1KGJgzp+plFHQggve/rUw=="
+  }
 }
