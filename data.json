@@ -7,6 +7,13 @@
       "amount": 10000,
       "payer": "Efe",
       "date": "2026-10-16T12:38:30.516Z"
+    },
+    {
+      "id": "mvayerlcon5op",
+      "desc": "Deterjan",
+      "amount": 20000,
+      "payer": "Yekta",
+      "date": "2026-10-16T12:38:40.176Z"
     }
   ],
   "payments": [],
