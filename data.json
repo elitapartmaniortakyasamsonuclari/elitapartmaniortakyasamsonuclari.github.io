@@ -1,58 +1,7 @@
 {
   "version": 1,
-  "purchases": [
-    {
-      "id": "mvayek500hoct",
-      "desc": "Kağıt havlu",
-      "amount": 10000,
-      "payer": "Efe",
-      "date": "2026-10-16T12:38:30.516Z"
-    },
-    {
-      "id": "mvayerlcon5op",
-      "desc": "Deterjan",
-      "amount": 20000,
-      "payer": "Yekta",
-      "date": "2026-10-16T12:38:40.176Z"
-    },
-    {
-      "id": "mvayf277lutn4",
-      "desc": "Çük",
-      "amount": 5000,
-      "payer": "Yekta",
-      "date": "2026-10-16T12:38:53.923Z"
-    },
-    {
-      "id": "mvayfa3727tfc",
-      "desc": "Araba",
-      "amount": 24000,
-      "payer": "Furkan",
-      "date": "2026-10-16T12:39:04.148Z"
-    },
-    {
-      "id": "mvayfl2bhnfop",
-      "desc": "Bot",
-      "amount": 27500,
-      "payer": "Alper",
-      "date": "2026-10-16T12:39:18.371Z"
-    }
-  ],
-  "payments": [
-    {
-      "id": "mvayg74z4gawk",
-      "from": "Efe",
-      "to": "Alper",
-      "amount": 5875,
-      "date": "2026-10-16T12:39:46.979Z"
-    },
-    {
-      "id": "mvayg9q8sqvs0",
-      "from": "Efe",
-      "to": "Furkan",
-      "amount": 2375,
-      "date": "2026-10-16T12:39:50.336Z"
-    }
-  ],
+  "purchases": [],
+  "payments": [],
   "rules": [
     {
       "id": "mvay6gnhvypb4",
@@ -83,5 +32,13 @@
       "text": "Hafta içi 00:00’dan sonra sessizlik."
     }
   ],
-  "history": []
+  "history": [
+    {
+      "id": "mvaygdbw489hv",
+      "closedAt": "2026-10-16T12:39:55.004Z",
+      "total": 86500,
+      "per": 21625,
+      "count": 5
+    }
+  ]
 }
