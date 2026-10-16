@@ -16,7 +16,15 @@
       "date": "2026-10-16T13:49:00.072Z"
     }
   ],
-  "payments": [],
+  "payments": [
+    {
+      "id": "mvb14hgo74ytm",
+      "from": "Furkan",
+      "to": "Yekta",
+      "amount": 1750,
+      "date": "2026-10-16T13:54:39.336Z"
+    }
+  ],
   "rules": [
     {
       "id": "mvay6gnhvypb4",
