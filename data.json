@@ -154,6 +154,11 @@
       "id": "cop",
       "name": "Çöp & geri dönüşüm",
       "icon": "🗑️"
+    },
+    {
+      "id": "mvbd0n40xswnw",
+      "name": "Süpürge",
+      "icon": "🧹"
     }
   ],
   "topRuleAdded": true
