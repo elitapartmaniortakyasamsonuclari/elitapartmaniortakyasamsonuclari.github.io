@@ -21,6 +21,18 @@
       "amount": 26000,
       "payer": "Efe",
       "date": "2026-10-16T14:26:07.539Z"
+    },
+    {
+      "id": "mvbe5myswcsqb",
+      "desc": "Filtre Kahve 2 tane (indirimdeydi)",
+      "amount": 45000,
+      "payer": "Efe",
+      "date": "2026-10-16T19:59:28.132Z",
+      "split": [
+        "Efe",
+        "Furkan",
+        "Yekta"
+      ]
     }
   ],
   "payments": [
