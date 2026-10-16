@@ -1,6 +1,14 @@
 {
   "version": 1,
-  "purchases": [],
+  "purchases": [
+    {
+      "id": "mvbe6wez4bx7x",
+      "desc": "Kağıt havlu çöp poşet",
+      "amount": 80000,
+      "payer": "Furkan",
+      "date": "2026-10-16T20:00:27.035Z"
+    }
+  ],
   "payments": [],
   "rules": [
     {
