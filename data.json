@@ -70,7 +70,7 @@
   "rules": [
     {
       "id": "mvbcxs5xeonyd",
-      "text": "HERKES KENDİ ARKASINI TOPLAR"
+      "text": "HERKES KENDİ ARKASINI TOPLAR!"
     },
     {
       "id": "mvay6gnhvypb4",
@@ -190,5 +190,13 @@
       "icon": "🧹"
     }
   ],
-  "topRuleAdded": true
+  "topRuleAdded": true,
+  "chore3Log": [],
+  "chores3": [
+    {
+      "id": "bulasik",
+      "name": "Bulaşık makinesi",
+      "icon": "🍽️"
+    }
+  ]
 }
