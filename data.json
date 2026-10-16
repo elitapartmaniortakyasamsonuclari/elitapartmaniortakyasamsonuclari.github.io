@@ -260,6 +260,11 @@
       "name": "Salon & Mutfak Süpürge",
       "icon": "🛋️",
       "shift": 2
+    },
+    {
+      "id": "mvbeio23isj0x",
+      "name": "kadayıf kumu",
+      "icon": "🧹"
     }
   ],
   "topRuleAdded": true,
