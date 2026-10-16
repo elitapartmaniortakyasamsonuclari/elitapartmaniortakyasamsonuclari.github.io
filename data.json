@@ -70,6 +70,13 @@
       "to": "Yekta",
       "amount": 500,
       "date": "2026-10-16T20:02:20.134Z"
+    },
+    {
+      "id": "mvbeb9xk1ndsp",
+      "from": "Furkan",
+      "to": "Yekta",
+      "amount": 22000,
+      "date": "2026-10-16T20:03:51.176Z"
     }
   ],
   "rules": [
