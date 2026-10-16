@@ -1,6 +1,14 @@
 {
   "version": 1,
-  "purchases": [],
+  "purchases": [
+    {
+      "id": "mvayek500hoct",
+      "desc": "Kağıt havlu",
+      "amount": 10000,
+      "payer": "Efe",
+      "date": "2026-10-16T12:38:30.516Z"
+    }
+  ],
   "payments": [],
   "rules": [
     {
