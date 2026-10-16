@@ -14,6 +14,18 @@
       "amount": 87000,
       "payer": "Yekta",
       "date": "2026-10-16T20:00:34.811Z"
+    },
+    {
+      "id": "mvbe7jo6jeyik",
+      "desc": "filtre kahve 2 paket",
+      "amount": 45000,
+      "payer": "Efe",
+      "date": "2026-10-16T20:00:57.174Z",
+      "split": [
+        "Efe",
+        "Furkan",
+        "Yekta"
+      ]
     }
   ],
   "payments": [],
