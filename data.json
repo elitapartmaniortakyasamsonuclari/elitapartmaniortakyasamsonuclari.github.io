@@ -63,6 +63,13 @@
       "to": "Efe",
       "amount": 6250,
       "date": "2026-10-16T20:02:16.536Z"
+    },
+    {
+      "id": "mvbe9bompabaw",
+      "from": "Efe",
+      "to": "Yekta",
+      "amount": 500,
+      "date": "2026-10-16T20:02:20.134Z"
     }
   ],
   "rules": [
