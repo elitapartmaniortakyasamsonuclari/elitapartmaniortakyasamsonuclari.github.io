@@ -129,7 +129,14 @@
   },
   "needs": [],
   "notes": [],
-  "exams": [],
+  "exams": [
+    {
+      "id": "mvbd32lc75oh5",
+      "who": "Efe",
+      "name": "2 tane sınav",
+      "date": "2026-11-05"
+    }
+  ],
   "ledger": [],
   "choreLog": [],
   "chores": [
