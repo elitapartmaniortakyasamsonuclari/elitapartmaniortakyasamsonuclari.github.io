@@ -192,11 +192,5 @@
   ],
   "topRuleAdded": true,
   "chore3Log": [],
-  "chores3": [
-    {
-      "id": "bulasik",
-      "name": "Bulaşık makinesi",
-      "icon": "🍽️"
-    }
-  ]
+  "chores3": []
 }
