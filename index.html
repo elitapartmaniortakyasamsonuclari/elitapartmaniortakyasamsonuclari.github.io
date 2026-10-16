@@ -358,9 +358,14 @@ dialog::backdrop{background:rgba(0,0,0,.45)}
   <!-- CHORES -->
   <section id="tab-chores" hidden>
     <div class="card">
-      <h2><span data-i18n="choresTitle">Bu haftanın nöbetleri</span> <span class="muted" id="weekLabel" style="font-weight:500"></span></h2>
+      <h2><span data-i18n="choresTitle">Bu haftanın nöbetleri</span> <span class="muted" id="weekLabel-w" style="font-weight:500"></span></h2>
       <p class="hint" data-i18n="choresHint"></p>
-      <div id="choreList"></div>
+      <div id="choreList-w"></div>
+    </div>
+    <div class="card">
+      <h2><span data-i18n="chores3Title">3 günlük nöbetler</span> <span class="muted" id="weekLabel-d3" style="font-weight:500"></span></h2>
+      <p class="hint" data-i18n="chores3Hint"></p>
+      <div id="choreList-d3"></div>
     </div>
     <div class="card">
       <h2 data-i18n="scoreTitle">Son 8 hafta</h2>
@@ -368,10 +373,14 @@ dialog::backdrop{background:rgba(0,0,0,.45)}
     </div>
     <div class="card">
       <h2 data-i18n="choreEdit">Görevleri düzenle</h2>
-      <ul class="list" id="choreTasks"></ul>
-      <form id="choreForm" class="row" autocomplete="off" style="margin-top:8px">
-        <input type="text" id="choreName" data-i18n-ph="chorePh" maxlength="40">
-        <button class="btn" type="submit" data-i18n="add">Ekle</button>
+      <h3 class="sub" data-i18n="periodWeekly">Haftalık</h3>
+      <ul class="list" id="choreTasks-w"></ul>
+      <h3 class="sub" data-i18n="period3">3 günlük</h3>
+      <ul class="list" id="choreTasks-d3"></ul>
+      <form id="choreForm" class="form three" autocomplete="off" style="margin-top:10px">
+        <div class="full"><input type="text" id="choreName" data-i18n-ph="chorePh" maxlength="40"></div>
+        <div><select id="choreKind"><option value="w" data-i18n="periodWeekly">Haftalık</option><option value="d3" data-i18n="period3">3 günlük</option></select></div>
+        <div><button class="btn" type="submit" style="width:100%" data-i18n="add">Ekle</button></div>
       </form>
     </div>
   </section>
@@ -471,6 +480,9 @@ const DEFAULT_RULES = [
   'Misafir gelecekse önceden gruba haber verilir.',
   'Ortak alışveriş bu siteye girilir, borçlar 1 hafta içinde ödenir.'
 ];
+const DEFAULT_CHORES3 = [
+  {id:'bulasik', name:'Bulaşık makinesi', icon:'🍽️'}
+];
 const DEFAULT_CHORES = [
   {id:'mutfak', name:'Mutfak', icon:'🍳'},
   {id:'banyo', name:'Banyo & tuvalet', icon:'🚿'},
@@ -511,6 +523,8 @@ const I18N = {
     choreMarked:'Eline sağlık! ✔', confirmUndoChore:'“Yapıldı” işareti kaldırılsın mı?', noChores:'Görev yok. Aşağıdan ekleyin.',
     scoreTitle:'Son 8 hafta', scoreRow:'{d}/{a} görev', scoreExtra:'+{n} başkasının yerine', scoreNone:'Henüz geçmiş hafta yok. İlk hafta bitince burada görünecek.',
     missedLast:'Geçen hafta yapılmayanlar', missedNone:'Geçen hafta her şey yapıldı 👏',
+    chores3Title:'3 günlük nöbetler', chores3Hint:'Bu görevler 3 günde bir sıradaki kişiye geçer.', choreNext3:'Sonraki 3 gün: {x}',
+    periodWeekly:'Haftalık', period3:'3 günlük', tag3:'3 gün', alChore3:'Bu 3 günde {x} senin',
     choreEdit:'Görevleri düzenle', chorePh:'Yeni görev, ör. Balkon', confirmDelChore:'“{x}” görevi silinsin mi?',
     upcoming:'Yaklaşanlar', allGood:'Her şey yolunda ✨',
     alChore:'Bu hafta {x} senin', alChoresOpen:'Bu hafta {n} görev daha yapılmadı', alNeeds:'{n} eksik var: {x}',
@@ -584,6 +598,8 @@ const I18N = {
     choreMarked:'Nice work! ✔', confirmUndoChore:'Remove the “done” mark?', noChores:'No chores. Add some below.',
     scoreTitle:'Last 8 weeks', scoreRow:'{d}/{a} chores', scoreExtra:'+{n} covering for others', scoreNone:'No past weeks yet. Shows up after the first week.',
     missedLast:'Missed last week', missedNone:'Everything got done last week 👏',
+    chores3Title:'3-day chores', chores3Hint:'These rotate to the next person every 3 days.', choreNext3:'Next 3 days: {x}',
+    periodWeekly:'Weekly', period3:'Every 3 days', tag3:'3 days', alChore3:'{x} is yours these 3 days',
     choreEdit:'Edit chores', chorePh:'New chore, e.g. Balcony', confirmDelChore:'Delete the chore “{x}”?',
     upcoming:'Coming up', allGood:'All good ✨',
     alChore:'{x} is yours this week', alChoresOpen:'{n} chores still open this week', alNeeds:'{n} missing: {x}',
@@ -656,7 +672,6 @@ const dayNum = s => { const [y, m, d] = s.split('-').map(Number); return Math.ro
 const addDays = (s, n) => { const d = new Date((dayNum(s) + n) * 864e5); return `${d.getUTCFullYear()}-${pad(d.getUTCMonth() + 1)}-${pad(d.getUTCDate())}`; };
 const monthKey = d => `${d.getFullYear()}-${pad(d.getMonth() + 1)}`;
 const fmtDay = (s, opt = {weekday:'short', day:'numeric', month:'short'}) => { const [y, m, d] = s.split('-').map(Number); return new Date(y, m - 1, d).toLocaleDateString(loc(), opt); };
-const curWeek = () => Math.floor((dayNum(todayStr()) - dayNum(CONFIG.choreStart)) / 7);
 
 function parseAmount(raw){
   let s = String(raw).trim().replace(/[₺\s]/g, '');
@@ -707,12 +722,13 @@ async function openVault(vault, pass){
 /* ============ data ============ */
 function emptyData(){
   return { version:2, purchases:[], payments:[], rules:DEFAULT_RULES.map(text => ({id:uid(), text})), history:[],
-           needs:[], notes:[], exams:[], ledger:[], chores:DEFAULT_CHORES.map(c => ({...c})), choreLog:[], topRuleAdded:true };
+           needs:[], notes:[], exams:[], ledger:[], chores:DEFAULT_CHORES.map(c => ({...c})), choreLog:[], chores3:DEFAULT_CHORES3.map(c => ({...c})), chore3Log:[], topRuleAdded:true };
 }
 function normalize(d){
   d = (d && typeof d === 'object') ? d : emptyData();
-  for(const k of ['purchases','payments','rules','history','needs','notes','exams','ledger','choreLog']) if(!Array.isArray(d[k])) d[k] = [];
+  for(const k of ['purchases','payments','rules','history','needs','notes','exams','ledger','choreLog','chore3Log']) if(!Array.isArray(d[k])) d[k] = [];
   if(!Array.isArray(d.chores)) d.chores = DEFAULT_CHORES.map(c => ({...c}));
+  if(!Array.isArray(d.chores3)) d.chores3 = DEFAULT_CHORES3.map(c => ({...c}));
   return d;
 }
 
@@ -772,21 +788,37 @@ function archive(d){
 }
 
 /* ============ nöbet ============ */
-const assignee = (task, i, w) => PEOPLE[mod(i + w + (task.shift || 0), PEOPLE.length)];
-const choreLogFor = (d, taskId, w) => d.choreLog.find(l => l.task === taskId && l.week === w);
+// w: haftalık (7 gün), d3: 3 günlük. Sıra CONFIG.choreStart'tan itibaren döngü döngü ilerler.
+const CH = { w:{list:'chores', log:'choreLog', len:7, keep:12, back:8}, d3:{list:'chores3', log:'chore3Log', len:3, keep:30, back:18} };
+const cycleOf = k => Math.floor((dayNum(todayStr()) - dayNum(CONFIG.choreStart)) / CH[k].len);
+const assignee = (task, i, c) => PEOPLE[mod(i + c + (task.shift || 0), PEOPLE.length)];
+const choreLogFor = (d, k, taskId, c) => d[CH[k].log].find(l => l.task === taskId && l.week === c);
 function choreStats(d){
-  const w = curWeek(), from = Math.max(0, w - 8), st = {}, missed = [];
+  const st = {}, missed = [];
+  let any = false;
   PEOPLE.forEach(p => st[p] = {assigned:0, done:0, extra:0});
-  for(let k = from; k < w; k++){
-    d.chores.forEach((task, i) => {
-      const a = assignee(task, i, k), log = choreLogFor(d, task.id, k);
-      st[a].assigned++;
-      if(log && log.by === a) st[a].done++;
-      else if(log && log.by in st) st[log.by].extra++;
-      if(!log && k === w - 1) missed.push({task, who:a});
-    });
+  for(const k of ['w', 'd3']){
+    const c = cycleOf(k), from = Math.max(0, c - CH[k].back);
+    if(c > from) any = true;
+    for(let x = from; x < c; x++){
+      d[CH[k].list].forEach((task, i) => {
+        const a = assignee(task, i, x), log = choreLogFor(d, k, task.id, x);
+        st[a].assigned++;
+        if(log && log.by === a) st[a].done++;
+        else if(log && log.by in st) st[log.by].extra++;
+        if(!log && x === c - 1) missed.push({task, who:a, k});
+      });
+    }
   }
-  return {st, missed, weeks:w - from};
+  return {st, missed, any};
+}
+function openChores(d){   // bu döngüde yapılmamış görevler
+  const out = [];
+  for(const k of ['w', 'd3']){
+    const c = cycleOf(k);
+    d[CH[k].list].forEach((task, i) => { if(!choreLogFor(d, k, task.id, c)) out.push({task, who:assignee(task, i, c), k}); });
+  }
+  return out;
 }
 
 /* ============ sınavlar ============ */
@@ -1022,10 +1054,10 @@ function renderHome(c, m){
   $('#meCard').innerHTML = h;
 
   // yaklaşanlar
-  const al = [], w = curWeek();
+  const al = [];
   upcomingExams(DATA, 3).forEach(e => al.push({ic:'📚', text:fill(t('alExam'), {who:e.who, x:e.name}), tag:examWhen(e.left), cls:e.left <= 1 ? 'bad' : 'warn', go:'home'}));
-  const open = DATA.chores.map((task, i) => ({task, who:assignee(task, i, w)})).filter(x => !choreLogFor(DATA, x.task.id, w));
-  if(m) open.filter(x => x.who === m).forEach(x => al.push({ic:x.task.icon || '🧹', text:fill(t('alChore'), {x:x.task.name}), tag:'', cls:'warn', go:'chores'}));
+  const open = openChores(DATA);
+  if(m) open.filter(x => x.who === m).forEach(x => al.push({ic:x.task.icon || '🧹', text:fill(t(x.k === 'd3' ? 'alChore3' : 'alChore'), {x:x.task.name}), tag:x.k === 'd3' ? t('tag3') : '', cls:'warn', go:'chores'}));
   else if(open.length) al.push({ic:'🧹', text:fill(t('alChoresOpen'), {n:open.length}), tag:'', cls:'warn', go:'chores'});
   if(DATA.needs.length) al.push({ic:'📝', text:fill(t('alNeeds'), {n:DATA.needs.length, x:DATA.needs.slice(0, 3).map(x => x.text).join(', ') + (DATA.needs.length > 3 ? '…' : '')}), tag:'', go:'needs'});
   $('#alerts').innerHTML = al.length ? al.map(a => `
@@ -1143,43 +1175,43 @@ function renderStats(){
 }
 
 /* ---- Nöbet ---- */
-function renderChores(m){
-  const w = curWeek(), start = addDays(CONFIG.choreStart, w * 7), end = addDays(start, 6);
-  $('#weekLabel').textContent = `(${fmtDay(start, {day:'numeric', month:'short'})} – ${fmtDay(end, {day:'numeric', month:'short'})})`;
+function renderChoreList(k, m){
+  const c = cycleOf(k), start = addDays(CONFIG.choreStart, c * CH[k].len), end = addDays(start, CH[k].len - 1);
+  $('#weekLabel-' + k).textContent = `(${fmtDay(start, {day:'numeric', month:'short'})} – ${fmtDay(end, {day:'numeric', month:'short'})})`;
+  const list = DATA[CH[k].list];
   let mine = 0;
-  $('#choreList').innerHTML = DATA.chores.length ? DATA.chores.map((task, i) => {
-    const who = assignee(task, i, w), log = choreLogFor(DATA, task.id, w), next = assignee(task, i, w + 1);
+  $('#choreList-' + k).innerHTML = list.length ? list.map((task, i) => {
+    const who = assignee(task, i, c), log = choreLogFor(DATA, k, task.id, c), next = assignee(task, i, c + 1);
     if(!log && who === m) mine++;
     const opts = PEOPLE.map(p => `<option value="${esc(p)}" ${p === who ? 'selected' : ''}>${esc(p)}${p === m ? ' (' + esc(t('you')) + ')' : ''}</option>`).join('');
     const status = log
       ? `<span class="tag ok">${esc(log.by === who ? fill(t('choreDoneBy'), {x:log.by}) : fill(t('choreDoneFor'), {x:log.by, y:who}))}</span>
-         <span class="grow"></span><button class="mini" data-choreundo="${task.id}" title="${esc(t('del'))}">↶</button>`
-      : `<span class="grow"></span><button class="btn ok sm" data-choredone="${task.id}">✓ ${esc(t('choreDoneBtn'))}</button>`;
+         <span class="grow"></span><button class="mini" data-choreundo="${k}|${task.id}" title="${esc(t('del'))}">↶</button>`
+      : `<span class="grow"></span><button class="btn ok sm" data-choredone="${k}|${task.id}">✓ ${esc(t('choreDoneBtn'))}</button>`;
     return `<div class="chore${who === m && !log ? ' me' : ''}${log ? ' isdone' : ''}">
       <div class="chore-top"><span class="ic">${task.icon || '🧹'}</span><span class="nm">${esc(task.name)}</span>
-        <small>${esc(fill(t('choreNext'), {x:next}))}</small></div>
-      <div class="chore-mid">${avatar(who)}<select data-choreassign="${task.id}" aria-label="assignee">${opts}</select>${status}</div>
+        <small>${esc(fill(t(k === 'd3' ? 'choreNext3' : 'choreNext'), {x:next}))}</small></div>
+      <div class="chore-mid">${avatar(who)}<select data-choreassign="${k}|${task.id}" aria-label="assignee">${opts}</select>${status}</div>
     </div>`;
   }).join('') : `<div class="empty">${esc(t('noChores'))}</div>`;
-  setBadge('chores', mine);
-
-  const {st, missed, weeks} = choreStats(DATA);
-  if(!weeks){ $('#choreScore').innerHTML = `<div class="empty">${esc(t('scoreNone'))}</div>`; }
-  else {
-    $('#choreScore').innerHTML = PEOPLE.map(p => {
-      const s = st[p], pct = s.assigned ? s.done / s.assigned : 1;
-      return `<div class="barrow"><span>${esc(p)}</span>
-        <div class="track"><div class="fill" style="width:${(pct * 100).toFixed(0)}%;background:${pct >= .75 ? 'var(--ok)' : pct >= .5 ? 'var(--warn)' : 'var(--bad)'}"></div></div>
-        <span class="v">${esc(fill(t('scoreRow'), {d:s.done, a:s.assigned}))}${s.extra ? ` <small class="muted" style="font-weight:400">${esc(fill(t('scoreExtra'), {n:s.extra}))}</small>` : ''}</span></div>`;
-    }).join('') + `<h3 class="sub">${esc(t('missedLast'))}</h3>` +
-    (missed.length ? `<ul class="list">${missed.map(x => `<li>${avatar(x.who, 'sm')}<div class="li-main"><b>${esc(x.task.name)}</b><small>${esc(x.who)}</small></div><span class="tag bad">✗</span></li>`).join('')}</ul>`
-                   : `<div class="muted" style="padding:6px 0">${esc(t('missedNone'))}</div>`);
-  }
-
-  $('#choreTasks').innerHTML = DATA.chores.map(task => `
+  $('#choreTasks-' + k).innerHTML = list.map(task => `
     <li><span class="ic">${task.icon || '🧹'}</span><div class="li-main"><b>${esc(task.name)}</b></div>
-      <button class="mini" data-chorerename="${task.id}" title="${esc(t('edit'))}">✎</button>
-      <button class="mini" data-choredel="${task.id}" title="${esc(t('del'))}">✕</button></li>`).join('');
+      <button class="mini" data-chorerename="${k}|${task.id}" title="${esc(t('edit'))}">✎</button>
+      <button class="mini" data-choredel="${k}|${task.id}" title="${esc(t('del'))}">✕</button></li>`).join('');
+  return mine;
+}
+function renderChores(m){
+  setBadge('chores', renderChoreList('w', m) + renderChoreList('d3', m));
+  const {st, missed, any} = choreStats(DATA);
+  if(!any){ $('#choreScore').innerHTML = `<div class="empty">${esc(t('scoreNone'))}</div>`; return; }
+  $('#choreScore').innerHTML = PEOPLE.map(p => {
+    const s = st[p], pct = s.assigned ? s.done / s.assigned : 1;
+    return `<div class="barrow"><span>${esc(p)}</span>
+      <div class="track"><div class="fill" style="width:${(pct * 100).toFixed(0)}%;background:${pct >= .75 ? 'var(--ok)' : pct >= .5 ? 'var(--warn)' : 'var(--bad)'}"></div></div>
+      <span class="v">${esc(fill(t('scoreRow'), {d:s.done, a:s.assigned}))}${s.extra ? ` <small class="muted" style="font-weight:400">${esc(fill(t('scoreExtra'), {n:s.extra}))}</small>` : ''}</span></div>`;
+  }).join('') + `<h3 class="sub">${esc(t('missedLast'))}</h3>` +
+  (missed.length ? `<ul class="list">${missed.map(x => `<li>${avatar(x.who, 'sm')}<div class="li-main"><b>${esc(x.task.name)}</b><small>${esc(x.who)}</small></div>${x.k === 'd3' ? `<span class="tag muted">${esc(t('tag3'))}</span>` : ''}<span class="tag bad">✗</span></li>`).join('')}</ul>`
+                 : `<div class="muted" style="padding:6px 0">${esc(t('missedNone'))}</div>`);
 }
 
 /* ---- Eksikler ---- */
@@ -1360,52 +1392,55 @@ $('#mPrev').onclick = () => { statsOff = Math.min(12, statsOff + 1); renderStats
 $('#mNext').onclick = () => { statsOff = Math.max(0, statsOff - 1); renderStats(); };
 
 /* ============ nöbet ============ */
-$('#choreList').addEventListener('click', async e => {
-  const done = e.target.closest('[data-choredone]'), undo = e.target.closest('[data-choreundo]');
-  const w = curWeek();
-  if(done){
-    const m = me(); if(!m) return toast(t('needMe'), true);
-    const id = done.dataset.choredone, task = DATA.chores.find(x => x.id === id);
-    if(await mutate(`Nöbet yapıldı: ${task ? task.name : id}`, d => {
-      if(choreLogFor(d, id, w)) throw errCode('gone');
-      d.choreLog.push({id:uid(), task:id, week:w, by:m, date:new Date().toISOString()});
-      d.choreLog = d.choreLog.filter(l => l.week >= w - 12);
-    })) toast(t('choreMarked'));
-  }
-  if(undo){
-    if(!confirm(t('confirmUndoChore'))) return;
-    const id = undo.dataset.choreundo;
-    if(await mutate('Nöbet işareti kaldırıldı', d => { d.choreLog = d.choreLog.filter(l => !(l.task === id && l.week === w)); })) toast(t('deleted'));
-  }
-});
-$('#choreList').addEventListener('change', async e => {
-  const sel = e.target.closest('[data-choreassign]'); if(!sel) return;
-  const id = sel.dataset.choreassign, who = sel.value, w = curWeek();
-  if(!(await mutate(`Nöbet değişti: ${who}`, d => {
-    const i = d.chores.findIndex(x => x.id === id); if(i < 0) return;
-    d.chores[i].shift = mod(PEOPLE.indexOf(who) - i - w, PEOPLE.length);
-  }))) render();
-  else toast(t('saved'));
+const splitKey = v => { const i = v.indexOf('|'); return [v.slice(0, i), v.slice(i + 1)]; };
+['w', 'd3'].forEach(k => {
+  $('#choreList-' + k).addEventListener('click', async e => {
+    const done = e.target.closest('[data-choredone]'), undo = e.target.closest('[data-choreundo]');
+    const c = cycleOf(k), L = CH[k];
+    if(done){
+      const m = me(); if(!m) return toast(t('needMe'), true);
+      const [, id] = splitKey(done.dataset.choredone), task = DATA[L.list].find(x => x.id === id);
+      if(await mutate(`Nöbet yapıldı: ${task ? task.name : id}`, d => {
+        if(choreLogFor(d, k, id, c)) throw errCode('gone');
+        d[L.log].push({id:uid(), task:id, week:c, by:m, date:new Date().toISOString()});
+        d[L.log] = d[L.log].filter(l => l.week >= c - L.keep);
+      })) toast(t('choreMarked'));
+    }
+    if(undo){
+      if(!confirm(t('confirmUndoChore'))) return;
+      const [, id] = splitKey(undo.dataset.choreundo);
+      if(await mutate('Nöbet işareti kaldırıldı', d => { d[L.log] = d[L.log].filter(l => !(l.task === id && l.week === c)); })) toast(t('deleted'));
+    }
+  });
+  $('#choreList-' + k).addEventListener('change', async e => {
+    const sel = e.target.closest('[data-choreassign]'); if(!sel) return;
+    const [, id] = splitKey(sel.dataset.choreassign), who = sel.value, c = cycleOf(k), L = CH[k];
+    if(!(await mutate(`Nöbet değişti: ${who}`, d => {
+      const i = d[L.list].findIndex(x => x.id === id); if(i < 0) return;
+      d[L.list][i].shift = mod(PEOPLE.indexOf(who) - i - c, PEOPLE.length);
+    }))) render();
+    else toast(t('saved'));
+  });
+  $('#choreTasks-' + k).addEventListener('click', async e => {
+    const rn = e.target.closest('[data-chorerename]'), del = e.target.closest('[data-choredel]'), L = CH[k];
+    if(rn){
+      const [, id] = splitKey(rn.dataset.chorerename), task = DATA[L.list].find(x => x.id === id); if(!task) return;
+      const nt = prompt(t('edit'), task.name);
+      if(nt === null || !nt.trim() || nt.trim() === task.name) return;
+      if(await mutate('Görev düzenlendi', d => { const x = d[L.list].find(y => y.id === id); if(x) x.name = nt.trim(); })) toast(t('saved'));
+    }
+    if(del){
+      const [, id] = splitKey(del.dataset.choredel), task = DATA[L.list].find(x => x.id === id); if(!task) return;
+      if(!confirm(fill(t('confirmDelChore'), {x:task.name}))) return;
+      if(await mutate(`Görev silindi: ${task.name}`, d => { d[L.list] = d[L.list].filter(x => x.id !== id); })) toast(t('deleted'));
+    }
+  });
 });
 $('#choreForm').onsubmit = async e => {
   e.preventDefault();
-  const name = $('#choreName').value.trim(); if(!name) return;
-  if(await mutate(`Görev eklendi: ${name}`, d => { d.chores.push({id:uid(), name, icon:'🧹'}); })){ $('#choreName').value = ''; toast(t('added')); }
+  const name = $('#choreName').value.trim(), k = $('#choreKind').value; if(!name) return;
+  if(await mutate(`Görev eklendi (${k === 'd3' ? '3 günlük' : 'haftalık'}): ${name}`, d => { d[CH[k].list].push({id:uid(), name, icon:'🧹'}); })){ $('#choreName').value = ''; toast(t('added')); }
 };
-$('#choreTasks').addEventListener('click', async e => {
-  const rn = e.target.closest('[data-chorerename]'), del = e.target.closest('[data-choredel]');
-  if(rn){
-    const task = DATA.chores.find(x => x.id === rn.dataset.chorerename); if(!task) return;
-    const nt = prompt(t('edit'), task.name);
-    if(nt === null || !nt.trim() || nt.trim() === task.name) return;
-    if(await mutate('Görev düzenlendi', d => { const x = d.chores.find(y => y.id === task.id); if(x) x.name = nt.trim(); })) toast(t('saved'));
-  }
-  if(del){
-    const task = DATA.chores.find(x => x.id === del.dataset.choredel); if(!task) return;
-    if(!confirm(fill(t('confirmDelChore'), {x:task.name}))) return;
-    if(await mutate(`Görev silindi: ${task.name}`, d => { d.chores = d.chores.filter(x => x.id !== task.id); })) toast(t('deleted'));
-  }
-});
 
 /* ============ eksikler ============ */
 $('#nForm').onsubmit = async e => {
