@@ -1,37 +1,7 @@
 {
   "version": 1,
-  "purchases": [
-    {
-      "id": "mvayokn9xglig",
-      "desc": "Şu iki şey",
-      "amount": 87000,
-      "payer": "Yekta",
-      "date": "2026-10-16T12:46:17.733Z"
-    },
-    {
-      "id": "mvazhv8hik2ql",
-      "desc": "çöp poşeti, kağıt havlu, sünger, makine kapsulu",
-      "amount": 80000,
-      "payer": "Furkan",
-      "date": "2026-10-16T13:09:04.481Z"
-    }
-  ],
-  "payments": [
-    {
-      "id": "mvb0wg4ntbk57",
-      "from": "Alper",
-      "to": "Yekta",
-      "amount": 3500,
-      "date": "2026-10-16T13:48:24.359Z"
-    },
-    {
-      "id": "mvb0wmxw05ut4",
-      "from": "Efe",
-      "to": "Yekta",
-      "amount": 41750,
-      "date": "2026-10-16T13:48:33.188Z"
-    }
-  ],
+  "purchases": [],
+  "payments": [],
   "rules": [
     {
       "id": "mvay6gnhvypb4",
@@ -63,6 +33,13 @@
     }
   ],
   "history": [
+    {
+      "id": "mvb0wq57odbm6",
+      "closedAt": "2026-10-16T13:48:37.339Z",
+      "total": 167000,
+      "per": 41750,
+      "count": 2
+    },
     {
       "id": "mvaygdbw489hv",
       "closedAt": "2026-10-16T12:39:55.004Z",
