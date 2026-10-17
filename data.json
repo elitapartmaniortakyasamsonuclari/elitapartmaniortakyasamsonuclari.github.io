@@ -24,6 +24,13 @@
       "to": "Furkan",
       "amount": 10000,
       "date": "2026-10-17T12:47:14.531Z"
+    },
+    {
+      "id": "mvclbhdkapeue",
+      "from": "Efe",
+      "to": "Furkan",
+      "amount": 19725,
+      "date": "2026-10-17T16:07:44.312Z"
     }
   ],
   "rules": [
