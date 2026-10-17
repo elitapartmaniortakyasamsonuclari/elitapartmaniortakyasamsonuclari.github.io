@@ -14,7 +14,12 @@
       "amount": 38900,
       "payer": "Furkan",
       "date": "2026-10-17T14:03:01.737Z",
-      "kind": "need"
+      "kind": "need",
+      "split": [
+        "Furkan",
+        "Yekta",
+        "Alper"
+      ]
     }
   ],
   "payments": [
