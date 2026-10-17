@@ -7,6 +7,14 @@
       "amount": 40000,
       "payer": "Furkan",
       "date": "2026-10-17T10:58:29.665Z"
+    },
+    {
+      "id": "mvcgv3s9zsj9n",
+      "desc": "Filtre kahve",
+      "amount": 38900,
+      "payer": "Furkan",
+      "date": "2026-10-17T14:03:01.737Z",
+      "kind": "need"
     }
   ],
   "payments": [
@@ -89,12 +97,6 @@
     "ct": "gjDOHnG1+JZ0mm5kUnjOfWoX3y4CdK3zb2FnIYzYtqd/67JU46TXIaQddKrgWoSzFI5DAl4V35n91HsY9qg+38WR3owKlM9Sd+Hmr0yKUMYdKiWKimxIYFLDhaXyF1KGJgzp+plFHQggve/rUw=="
   },
   "needs": [
-    {
-      "id": "mvbg811san8jr",
-      "text": "Filtre kahve",
-      "by": "Efe",
-      "date": "2026-10-16T20:57:18.928Z"
-    },
     {
       "id": "mvcb7vn8ashay",
       "text": "Marlbora edge blue",
