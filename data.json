@@ -219,6 +219,11 @@
       "name": "Salon toplama & süpürge",
       "icon": "🛋️",
       "shift": 2
+    },
+    {
+      "id": "mvc3otj9egqki",
+      "name": "Mutfak &  Balkon süpürge",
+      "icon": "🧹"
     }
   ],
   "topRuleAdded": true,
