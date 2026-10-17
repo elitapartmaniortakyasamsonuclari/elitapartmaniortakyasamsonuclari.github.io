@@ -1,6 +1,14 @@
 {
   "version": 1,
-  "purchases": [],
+  "purchases": [
+    {
+      "id": "mvca9sipt158i",
+      "desc": "kağıt havlu, deterjan",
+      "amount": 40000,
+      "payer": "Furkan",
+      "date": "2026-10-17T10:58:29.665Z"
+    }
+  ],
   "payments": [],
   "rules": [
     {
