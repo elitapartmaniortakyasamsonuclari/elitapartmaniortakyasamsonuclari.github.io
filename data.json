@@ -9,7 +9,15 @@
       "date": "2026-10-17T10:58:29.665Z"
     }
   ],
-  "payments": [],
+  "payments": [
+    {
+      "id": "mvce5n4zrn0x9",
+      "from": "Yekta",
+      "to": "Furkan",
+      "amount": 10000,
+      "date": "2026-10-17T12:47:14.531Z"
+    }
+  ],
   "rules": [
     {
       "id": "mvbcxs5xeonyd",
