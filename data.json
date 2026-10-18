@@ -124,7 +124,14 @@
     "iv": "XegOWClBFSYRZPZA",
     "ct": "gjDOHnG1+JZ0mm5kUnjOfWoX3y4CdK3zb2FnIYzYtqd/67JU46TXIaQddKrgWoSzFI5DAl4V35n91HsY9qg+38WR3owKlM9Sd+Hmr0yKUMYdKiWKimxIYFLDhaXyF1KGJgzp+plFHQggve/rUw=="
   },
-  "needs": [],
+  "needs": [
+    {
+      "id": "mve0fbl4ys2ct",
+      "text": "Yüzey Temizleme Sıvısı (Tahta Zemin)",
+      "by": "Yekta",
+      "date": "2026-10-18T15:58:23.848Z"
+    }
+  ],
   "notes": [],
   "exams": [
     {
