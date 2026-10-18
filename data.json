@@ -52,6 +52,13 @@
       "to": "Efe",
       "amount": 20000,
       "date": "2026-10-18T15:57:11.325Z"
+    },
+    {
+      "id": "mve7u8tjgnujj",
+      "from": "Furkan",
+      "to": "Efe",
+      "amount": 20000,
+      "date": "2026-10-18T19:25:57.416Z"
     }
   ],
   "rules": [
