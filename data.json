@@ -15,6 +15,13 @@
       "payer": "Furkan",
       "date": "2026-10-17T14:03:01.737Z",
       "kind": "need"
+    },
+    {
+      "id": "mvdwmo2toyf4i",
+      "desc": "Çaydanlık",
+      "amount": 80000,
+      "payer": "Efe",
+      "date": "2026-10-18T14:12:08.165Z"
     }
   ],
   "payments": [
