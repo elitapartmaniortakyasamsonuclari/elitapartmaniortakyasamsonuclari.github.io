@@ -307,7 +307,12 @@
       "id": "mvbeiyvjz587e",
       "name": "kadayıf kumu",
       "icon": "🧹",
-      "shift": 2
+      "shift": 1,
+      "members": [
+        "Efe",
+        "Furkan",
+        "Yekta"
+      ]
     }
   ]
 }
