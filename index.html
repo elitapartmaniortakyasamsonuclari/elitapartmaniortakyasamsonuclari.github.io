@@ -170,6 +170,15 @@ ul.list li:first-child{border-top:0}
 .barrow .fill{height:100%;border-radius:999px}
 .barrow .v{font-weight:600;font-variant-numeric:tabular-nums;white-space:nowrap}
 .month-nav{display:flex;align-items:center;gap:6px}
+.hist-head{display:flex;align-items:center;gap:8px;margin:14px 0 2px}
+.hist-head:first-of-type{margin-top:0}
+.hist-head .lbl{flex:1;min-width:0;font-weight:600}
+.hist-head .lbl small{display:block;color:var(--muted);font-weight:500;font-size:13px}
+.mchips{display:flex;flex-wrap:wrap;gap:4px;margin-top:6px}
+.mchips .chip{padding:3px 9px 3px 3px;font-size:13px}
+.mchips .chip .av{width:20px;height:20px;font-size:11px}
+.task-row{display:block!important}
+.task-row .top{display:flex;align-items:center;gap:12px}
 .month-nav button{border:1px solid var(--line);background:var(--bg);width:32px;height:32px;border-radius:9px;cursor:pointer;font-size:16px}
 .month-nav button:disabled{opacity:.35;cursor:default}
 .split3{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:14px}
@@ -368,17 +377,29 @@ dialog::backdrop{background:rgba(0,0,0,.45)}
       <div id="choreList-d3"></div>
     </div>
     <div class="card">
+      <h2 data-i18n="histTitle">Kim ne zaman yaptı?</h2>
+      <p class="hint" data-i18n="histHint"></p>
+      <div class="hist-head"><div class="lbl" id="histLabel-w"></div>
+        <span class="month-nav"><button data-hnav="w|1" aria-label="prev">‹</button><button data-hnav="w|-1" aria-label="next">›</button></span></div>
+      <ul class="list" id="hist-w"></ul>
+      <div class="hist-head"><div class="lbl" id="histLabel-d3"></div>
+        <span class="month-nav"><button data-hnav="d3|1" aria-label="prev">‹</button><button data-hnav="d3|-1" aria-label="next">›</button></span></div>
+      <ul class="list" id="hist-d3"></ul>
+    </div>
+    <div class="card">
       <h2 data-i18n="scoreTitle">Son 8 hafta</h2>
       <div id="choreScore"></div>
     </div>
     <div class="card">
       <h2 data-i18n="choreEdit">Görevleri düzenle</h2>
+      <p class="hint" data-i18n="choreEditHint"></p>
       <h3 class="sub" data-i18n="periodWeekly">Haftalık</h3>
       <ul class="list" id="choreTasks-w"></ul>
       <h3 class="sub" data-i18n="period3">3 günlük</h3>
       <ul class="list" id="choreTasks-d3"></ul>
       <form id="choreForm" class="form three" autocomplete="off" style="margin-top:10px">
         <div class="full"><input type="text" id="choreName" data-i18n-ph="chorePh" maxlength="40"></div>
+        <div class="full"><label class="f" data-i18n="choreWho">Kimler dahil?</label><div class="chips" id="newChoreMembers"></div></div>
         <div><select id="choreKind"><option value="w" data-i18n="periodWeekly">Haftalık</option><option value="d3" data-i18n="period3">3 günlük</option></select></div>
         <div><button class="btn" type="submit" style="width:100%" data-i18n="add">Ekle</button></div>
       </form>
@@ -472,22 +493,25 @@ const CONFIG = {
   quietHour: '23:00'        // sınav haftasında sessizlik saati
 };
 const DEFAULT_RULES = [
-  'HERKES KENDİ ARKASINI TOPLAR',
+  'HERKES KENDİ ARKASINI TOPLAR!',
   'Bulaşıklar aynı gün yıkanır, lavaboda bekletilmez.',
   'Ortak alanlar (mutfak, banyo, salon) haftalık sırayla temizlenir.',
   'Çöpü dolduran çıkarır.',
-  'Hafta içi 00:00’dan sonra sessizlik.',
+  'Çöpü çıkıran 6 ile 8 arası kapının önüne koyar.',
   'Misafir gelecekse önceden gruba haber verilir.',
-  'Ortak alışveriş bu siteye girilir, borçlar 1 hafta içinde ödenir.'
+  'Hafta içi 00:00’dan sonra sessizlik.',
+  'Kadayıfın kumu 3 günde bir sırayla temizlenir temizleyen gruba haber verir.'
 ];
-const DEFAULT_CHORES3 = [
-  {id:'bulasik', name:'Bulaşık makinesi', icon:'🍽️'}
+const DEFAULT_CHORES3 = [   // sitedeki 3 günlük görevler (19 Eki)
+  {id:'mvbdoz9ea1ge4', name:'Koridor Süpürge', icon:'🧹', shift:2},
+  {id:'mvbdstzwtg977', name:'Balkon', icon:'🧹', shift:2},
+  {id:'mvbeiyvjz587e', name:'kadayıf kumu', icon:'🧹', shift:2}
 ];
-const DEFAULT_CHORES = [
-  {id:'mutfak', name:'Mutfak', icon:'🍳'},
+const DEFAULT_CHORES = [    // sitedeki haftalık görevler (19 Eki)
+  {id:'mutfak', name:'Mutfak Tezgahı & Ocak', icon:'🍳', shift:2},
   {id:'banyo', name:'Banyo & tuvalet', icon:'🚿'},
-  {id:'salon', name:'Salon & koridor', icon:'🛋️'},
-  {id:'cop', name:'Çöp & geri dönüşüm', icon:'🗑️'}
+  {id:'salon', name:'Salon toplama & süpürge', icon:'🛋️', shift:2},
+  {id:'mvc3otj9egqki', name:'Mutfak &  Balkon süpürge', icon:'🧹'}
 ];
 /* ============ i18n ============ */
 const I18N = {
@@ -525,6 +549,12 @@ const I18N = {
     missedLast:'Geçen hafta yapılmayanlar', missedNone:'Geçen hafta her şey yapıldı 👏',
     chores3Title:'3 günlük nöbetler', chores3Hint:'Bu görevler 3 günde bir sıradaki kişiye geçer.', choreNext3:'Sonraki 3 gün: {x}',
     periodWeekly:'Haftalık', period3:'3 günlük', tag3:'3 gün', alChore3:'Bu 3 günde {x} senin',
+    histTitle:'Kim ne zaman yaptı?', histHint:'‹ › ile önceki haftalara / 3 günlere bakabilirsin.',
+    histWeekly:'Haftalık', hist3:'3 günlük', histCur:'şu anki', histPrev1:'bir önceki', histPrevN:'{n} önceki',
+    histDoneAt:'{t}', histFor:'{x} yerine', histTurn:'Sırası: {x}', histMissed:'Yapılmadı', histPending:'Bekliyor', histDeleted:'(silinmiş görev)',
+    choreDoneAt:'✓ {x} · {t}', choreDoneForAt:'✓ {x} · {t} ({y} yerine)',
+    choreEditHint:'Kişilere dokunarak o göreve kimlerin dahil olacağını seç. Sıra sadece seçilenler arasında döner.',
+    choreWho:'Kimler dahil?', errMembers:'En az bir kişi dahil olmalı.', onlyMembers:'Sadece: {x}',
     choreEdit:'Görevleri düzenle', chorePh:'Yeni görev, ör. Balkon', confirmDelChore:'“{x}” görevi silinsin mi?',
     upcoming:'Yaklaşanlar', allGood:'Her şey yolunda ✨',
     alChore:'Bu hafta {x} senin', alChoresOpen:'Bu hafta {n} görev daha yapılmadı', alNeeds:'{n} eksik var: {x}',
@@ -600,6 +630,12 @@ const I18N = {
     missedLast:'Missed last week', missedNone:'Everything got done last week 👏',
     chores3Title:'3-day chores', chores3Hint:'These rotate to the next person every 3 days.', choreNext3:'Next 3 days: {x}',
     periodWeekly:'Weekly', period3:'Every 3 days', tag3:'3 days', alChore3:'{x} is yours these 3 days',
+    histTitle:'Who did what, when?', histHint:'Use ‹ › to look at earlier weeks / 3-day periods.',
+    histWeekly:'Weekly', hist3:'3-day', histCur:'current', histPrev1:'previous', histPrevN:'{n} back',
+    histDoneAt:'{t}', histFor:'for {x}', histTurn:'Turn: {x}', histMissed:'Not done', histPending:'Pending', histDeleted:'(deleted chore)',
+    choreDoneAt:'✓ {x} · {t}', choreDoneForAt:'✓ {x} · {t} (for {y})',
+    choreEditHint:'Tap people to choose who takes part in each chore. It only rotates between them.',
+    choreWho:'Who takes part?', errMembers:'At least one person must take part.', onlyMembers:'Only: {x}',
     choreEdit:'Edit chores', chorePh:'New chore, e.g. Balcony', confirmDelChore:'Delete the chore “{x}”?',
     upcoming:'Coming up', allGood:'All good ✨',
     alChore:'{x} is yours this week', alChoresOpen:'{n} chores still open this week', alNeeds:'{n} missing: {x}',
@@ -733,13 +769,13 @@ function normalize(d){
 }
 
 /* Tek seferlik: "HERKES KENDİ ARKASINI TOPLAR" kuralını 1. sıraya ekler (silinirse bir daha eklenmez) */
-const TOP_RULE = 'HERKES KENDİ ARKASINI TOPLAR';
+const TOP_RULE = 'HERKES KENDİ ARKASINI TOPLAR!';
 async function migrate(){
   if(!DATA || DATA.topRuleAdded || busy) return;
   if(store() === github && !token()) return;
   await mutate('Kural eklendi: ' + TOP_RULE, d => {
     if(d.topRuleAdded) return;
-    d.rules = d.rules.filter(r => r.text.trim().toLocaleUpperCase('tr') !== TOP_RULE);
+    d.rules = d.rules.filter(r => r.text.trim().toLocaleUpperCase('tr').replace(/!+$/, '') !== TOP_RULE.replace(/!+$/, ''));
     d.rules.unshift({id:uid(), text:TOP_RULE});
     d.topRuleAdded = true;
   });
@@ -791,7 +827,10 @@ function archive(d){
 // w: haftalık (7 gün), d3: 3 günlük. Sıra CONFIG.choreStart'tan itibaren döngü döngü ilerler.
 const CH = { w:{list:'chores', log:'choreLog', len:7, keep:12, back:8}, d3:{list:'chores3', log:'chore3Log', len:3, keep:30, back:18} };
 const cycleOf = k => Math.floor((dayNum(todayStr()) - dayNum(CONFIG.choreStart)) / CH[k].len);
-const assignee = (task, i, c) => PEOPLE[mod(i + c + (task.shift || 0), PEOPLE.length)];
+const membersOf = task => { const m = Array.isArray(task.members) ? PEOPLE.filter(p => task.members.includes(p)) : []; return m.length ? m : PEOPLE; };
+const assignee = (task, i, c) => { const ms = membersOf(task); return ms[mod(i + c + (task.shift || 0), ms.length)]; };
+const shiftFor = (task, i, c, who) => { const ms = membersOf(task); return mod(ms.indexOf(who) - i - c, ms.length); };
+const doneTime = iso => { try{ return new Date(iso).toLocaleString(loc(), {weekday:'short', day:'numeric', month:'short', hour:'2-digit', minute:'2-digit'}); }catch{ return ''; } };
 const choreLogFor = (d, k, taskId, c) => d[CH[k].log].find(l => l.task === taskId && l.week === c);
 function choreStats(d){
   const st = {}, missed = [];
@@ -802,7 +841,7 @@ function choreStats(d){
     if(c > from) any = true;
     for(let x = from; x < c; x++){
       d[CH[k].list].forEach((task, i) => {
-        const a = assignee(task, i, x), log = choreLogFor(d, k, task.id, x);
+        const log = choreLogFor(d, k, task.id, x), a = (log && log.for) || assignee(task, i, x);
         st[a].assigned++;
         if(log && log.by === a) st[a].done++;
         else if(log && log.by in st) st[log.by].extra++;
@@ -1181,27 +1220,59 @@ function renderChoreList(k, m){
   const list = DATA[CH[k].list];
   let mine = 0;
   $('#choreList-' + k).innerHTML = list.length ? list.map((task, i) => {
-    const who = assignee(task, i, c), log = choreLogFor(DATA, k, task.id, c), next = assignee(task, i, c + 1);
+    const log = choreLogFor(DATA, k, task.id, c), who = (log && log.for) || assignee(task, i, c), next = assignee(task, i, c + 1), ms = membersOf(task);
     if(!log && who === m) mine++;
-    const opts = PEOPLE.map(p => `<option value="${esc(p)}" ${p === who ? 'selected' : ''}>${esc(p)}${p === m ? ' (' + esc(t('you')) + ')' : ''}</option>`).join('');
+    const opts = ms.map(p => `<option value="${esc(p)}" ${p === who ? 'selected' : ''}>${esc(p)}${p === m ? ' (' + esc(t('you')) + ')' : ''}</option>`).join('');
     const status = log
-      ? `<span class="tag ok">${esc(log.by === who ? fill(t('choreDoneBy'), {x:log.by}) : fill(t('choreDoneFor'), {x:log.by, y:who}))}</span>
+      ? `<span class="tag ok">${esc(log.by === who ? fill(t('choreDoneAt'), {x:log.by, t:doneTime(log.date)}) : fill(t('choreDoneForAt'), {x:log.by, y:who, t:doneTime(log.date)}))}</span>
          <span class="grow"></span><button class="mini" data-choreundo="${k}|${task.id}" title="${esc(t('del'))}">↶</button>`
       : `<span class="grow"></span><button class="btn ok sm" data-choredone="${k}|${task.id}">✓ ${esc(t('choreDoneBtn'))}</button>`;
     return `<div class="chore${who === m && !log ? ' me' : ''}${log ? ' isdone' : ''}">
       <div class="chore-top"><span class="ic">${task.icon || '🧹'}</span><span class="nm">${esc(task.name)}</span>
-        <small>${esc(fill(t(k === 'd3' ? 'choreNext3' : 'choreNext'), {x:next}))}</small></div>
+        <small style="text-align:right">${esc(fill(t(k === 'd3' ? 'choreNext3' : 'choreNext'), {x:next}))}${ms.length < PEOPLE.length ? '<br>' + esc(fill(t('onlyMembers'), {x:ms.join(', ')})) : ''}</small></div>
       <div class="chore-mid">${avatar(who)}<select data-choreassign="${k}|${task.id}" aria-label="assignee">${opts}</select>${status}</div>
     </div>`;
   }).join('') : `<div class="empty">${esc(t('noChores'))}</div>`;
-  $('#choreTasks-' + k).innerHTML = list.map(task => `
-    <li><span class="ic">${task.icon || '🧹'}</span><div class="li-main"><b>${esc(task.name)}</b></div>
+  $('#choreTasks-' + k).innerHTML = list.map(task => { const ms = membersOf(task); return `
+    <li class="task-row"><div class="top"><span class="ic">${task.icon || '🧹'}</span><div class="li-main"><b>${esc(task.name)}</b></div>
       <button class="mini" data-chorerename="${k}|${task.id}" title="${esc(t('edit'))}">✎</button>
-      <button class="mini" data-choredel="${k}|${task.id}" title="${esc(t('del'))}">✕</button></li>`).join('');
+      <button class="mini" data-choredel="${k}|${task.id}" title="${esc(t('del'))}">✕</button></div>
+      <div class="mchips">${PEOPLE.map(p => `<button type="button" class="chip ${ms.includes(p) ? 'on' : ''}" data-member="${k}|${task.id}|${esc(p)}">${avatar(p)}${esc(p)}</button>`).join('')}</div></li>`; }).join('');
   return mine;
 }
+const histOff = {w:1, d3:1};
+function renderHistory(k){
+  const cNow = cycleOf(k), maxOff = Math.min(cNow, k === 'w' ? 12 : 30);
+  histOff[k] = Math.max(0, Math.min(histOff[k], maxOff));
+  const off = histOff[k], c = cNow - off, len = CH[k].len;
+  const start = addDays(CONFIG.choreStart, c * len), end = addDays(start, len - 1);
+  const range = `${fmtDay(start, {day:'numeric', month:'short'})} – ${fmtDay(end, {day:'numeric', month:'short'})}`;
+  const which = off === 0 ? t('histCur') : off === 1 ? t('histPrev1') : fill(t('histPrevN'), {n:off});
+  $('#histLabel-' + k).innerHTML = `${esc(t(k === 'w' ? 'histWeekly' : 'hist3'))} · ${esc(which)}<small>${esc(range)}</small>`;
+  document.querySelector(`[data-hnav="${k}|1"]`).disabled = off >= maxOff;
+  document.querySelector(`[data-hnav="${k}|-1"]`).disabled = off <= 0;
+  const list = DATA[CH[k].list], logs = DATA[CH[k].log].filter(l => l.week === c);
+  const rows = list.map((task, i) => {
+    const log = logs.find(l => l.task === task.id), turn = (log && log.for) || assignee(task, i, c);
+    return {name:task.name, icon:task.icon, log, turn};
+  });
+  logs.filter(l => !list.some(x => x.id === l.task)).forEach(l => rows.push({name:l.name || t('histDeleted'), icon:'🧹', log:l, turn:l.for || l.by}));
+  rows.sort((a, b) => (a.log ? 0 : 1) - (b.log ? 0 : 1) || (a.log && b.log ? a.log.date.localeCompare(b.log.date) : 0));
+  $('#hist-' + k).innerHTML = rows.length ? rows.map(r => r.log ? `
+    <li>${avatar(r.log.by)}<div class="li-main"><b>${esc(r.name)}</b>
+      <small><b style="display:inline;color:var(--ink)">${esc(r.log.by)}</b> · ${esc(doneTime(r.log.date))}${r.log.for && r.log.by !== r.log.for ? ' · ' + esc(fill(t('histFor'), {x:r.log.for})) : ''}</small></div>
+      <span class="tag ok">✓</span></li>` : `
+    <li>${avatar(r.turn)}<div class="li-main"><b>${esc(r.name)}</b><small>${esc(fill(t('histTurn'), {x:r.turn}))}</small></div>
+      <span class="tag ${off === 0 ? 'muted' : 'bad'}">${esc(t(off === 0 ? 'histPending' : 'histMissed'))}</span></li>`).join('')
+    : `<div class="empty">${esc(t('noChores'))}</div>`;
+}
+function renderNewChoreMembers(){
+  $('#newChoreMembers').innerHTML = PEOPLE.map(p => `<button type="button" class="chip ${newChoreMembers.has(p) ? 'on' : ''}" data-nm="${esc(p)}">${avatar(p)}${esc(p)}</button>`).join('');
+}
+let newChoreMembers = new Set(PEOPLE);
 function renderChores(m){
   setBadge('chores', renderChoreList('w', m) + renderChoreList('d3', m));
+  renderHistory('w'); renderHistory('d3'); renderNewChoreMembers();
   const {st, missed, any} = choreStats(DATA);
   if(!any){ $('#choreScore').innerHTML = `<div class="empty">${esc(t('scoreNone'))}</div>`; return; }
   $('#choreScore').innerHTML = PEOPLE.map(p => {
@@ -1402,7 +1473,8 @@ const splitKey = v => { const i = v.indexOf('|'); return [v.slice(0, i), v.slice
       const [, id] = splitKey(done.dataset.choredone), task = DATA[L.list].find(x => x.id === id);
       if(await mutate(`Nöbet yapıldı: ${task ? task.name : id}`, d => {
         if(choreLogFor(d, k, id, c)) throw errCode('gone');
-        d[L.log].push({id:uid(), task:id, week:c, by:m, date:new Date().toISOString()});
+        const i = d[L.list].findIndex(x => x.id === id), tk = d[L.list][i];
+        d[L.log].push({id:uid(), task:id, week:c, by:m, for:tk ? assignee(tk, i, c) : m, name:tk ? tk.name : '', date:new Date().toISOString()});
         d[L.log] = d[L.log].filter(l => l.week >= c - L.keep);
       })) toast(t('choreMarked'));
     }
@@ -1417,11 +1489,29 @@ const splitKey = v => { const i = v.indexOf('|'); return [v.slice(0, i), v.slice
     const [, id] = splitKey(sel.dataset.choreassign), who = sel.value, c = cycleOf(k), L = CH[k];
     if(!(await mutate(`Nöbet değişti: ${who}`, d => {
       const i = d[L.list].findIndex(x => x.id === id); if(i < 0) return;
-      d[L.list][i].shift = mod(PEOPLE.indexOf(who) - i - c, PEOPLE.length);
+      d[L.list][i].shift = shiftFor(d[L.list][i], i, c, who);
     }))) render();
     else toast(t('saved'));
   });
   $('#choreTasks-' + k).addEventListener('click', async e => {
+    const mb = e.target.closest('[data-member]');
+    if(mb){
+      const [, rest] = splitKey(mb.dataset.member), j = rest.lastIndexOf('|'), id = rest.slice(0, j), p = rest.slice(j + 1), L = CH[k], c = cycleOf(k);
+      const task = DATA[L.list].find(x => x.id === id); if(!task) return;
+      const cur = new Set(membersOf(task));
+      cur.has(p) ? cur.delete(p) : cur.add(p);
+      if(!cur.size) return toast(t('errMembers'), true);
+      const members = PEOPLE.filter(x => cur.has(x));
+      if(await mutate(`Görev kişileri: ${task.name} → ${members.join(', ')}`, d => {
+        const i = d[L.list].findIndex(x => x.id === id); if(i < 0) return;
+        const tk = d[L.list][i], before = assignee(tk, i, c);
+        if(members.length === PEOPLE.length) delete tk.members; else tk.members = members;
+        // şu anki sorumlu hâlâ dahilse aynı kalsın
+        if(members.includes(before)) tk.shift = shiftFor(tk, i, c, before);
+        else tk.shift = mod(tk.shift || 0, members.length);
+      })) toast(t('saved'));
+      return;
+    }
     const rn = e.target.closest('[data-chorerename]'), del = e.target.closest('[data-choredel]'), L = CH[k];
     if(rn){
       const [, id] = splitKey(rn.dataset.chorerename), task = DATA[L.list].find(x => x.id === id); if(!task) return;
@@ -1439,8 +1529,24 @@ const splitKey = v => { const i = v.indexOf('|'); return [v.slice(0, i), v.slice
 $('#choreForm').onsubmit = async e => {
   e.preventDefault();
   const name = $('#choreName').value.trim(), k = $('#choreKind').value; if(!name) return;
-  if(await mutate(`Görev eklendi (${k === 'd3' ? '3 günlük' : 'haftalık'}): ${name}`, d => { d[CH[k].list].push({id:uid(), name, icon:'🧹'}); })){ $('#choreName').value = ''; toast(t('added')); }
+  if(!newChoreMembers.size) return toast(t('errMembers'), true);
+  const members = PEOPLE.filter(p => newChoreMembers.has(p));
+  if(await mutate(`Görev eklendi (${k === 'd3' ? '3 günlük' : 'haftalık'}): ${name}`, d => {
+    const tk = {id:uid(), name, icon:'🧹'};
+    if(members.length < PEOPLE.length) tk.members = members;
+    d[CH[k].list].push(tk);
+  })){ $('#choreName').value = ''; newChoreMembers = new Set(PEOPLE); renderNewChoreMembers(); toast(t('added')); }
 };
+$('#newChoreMembers').onclick = e => {
+  const b = e.target.closest('[data-nm]'); if(!b) return;
+  newChoreMembers.has(b.dataset.nm) ? newChoreMembers.delete(b.dataset.nm) : newChoreMembers.add(b.dataset.nm);
+  renderNewChoreMembers();
+};
+document.addEventListener('click', e => {
+  const h = e.target.closest('[data-hnav]'); if(!h) return;
+  const [k, dir] = h.dataset.hnav.split('|');
+  histOff[k] += +dir; renderHistory(k);
+});
 
 /* ============ eksikler ============ */
 $('#nForm').onsubmit = async e => {
