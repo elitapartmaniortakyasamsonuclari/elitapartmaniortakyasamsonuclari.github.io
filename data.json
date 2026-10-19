@@ -259,7 +259,13 @@
     {
       "id": "banyo",
       "name": "Banyo & tuvalet",
-      "icon": "🚿"
+      "icon": "🚿",
+      "members": [
+        "Efe",
+        "Furkan",
+        "Alper"
+      ],
+      "shift": 0
     },
     {
       "id": "salon",
