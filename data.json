@@ -99,6 +99,13 @@
       "to": "Efe",
       "amount": 8750,
       "date": "2026-10-25T20:20:20.723Z"
+    },
+    {
+      "id": "mvw868gwoqwzl",
+      "from": "Alper",
+      "to": "Yekta",
+      "amount": 21472,
+      "date": "2026-10-31T09:55:08.000Z"
     }
   ],
   "rules": [
