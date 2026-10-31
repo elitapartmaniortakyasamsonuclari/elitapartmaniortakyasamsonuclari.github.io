@@ -113,6 +113,13 @@
       "to": "Yekta",
       "amount": 44803,
       "date": "2026-10-31T09:55:10.782Z"
+    },
+    {
+      "id": "mvw89dthkii7i",
+      "from": "Alper",
+      "to": "Efe",
+      "amount": 28750,
+      "date": "2026-10-31T09:57:34.901Z"
     }
   ],
   "rules": [
