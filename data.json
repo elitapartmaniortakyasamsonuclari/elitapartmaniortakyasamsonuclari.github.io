@@ -120,6 +120,13 @@
       "to": "Efe",
       "amount": 28750,
       "date": "2026-10-31T09:57:34.901Z"
+    },
+    {
+      "id": "mvw8cyy4edz5s",
+      "from": "Alper",
+      "to": "Furkan",
+      "amount": 19725,
+      "date": "2026-10-31T10:00:22.252Z"
     }
   ],
   "rules": [
