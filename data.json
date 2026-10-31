@@ -42,7 +42,12 @@
       "desc": "Jacobs Gold Cekirdek Kahve",
       "amount": 69990,
       "payer": "Yekta",
-      "date": "2026-10-28T10:09:41.307Z"
+      "date": "2026-10-28T10:09:41.307Z",
+      "split": [
+        "Efe",
+        "Furkan",
+        "Yekta"
+      ]
     },
     {
       "id": "mvrydxkdlxizp",
