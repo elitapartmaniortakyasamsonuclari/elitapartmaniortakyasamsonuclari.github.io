@@ -55,6 +55,13 @@
       "amount": 58900,
       "payer": "Yekta",
       "date": "2026-10-28T10:10:06.253Z"
+    },
+    {
+      "id": "mvxn0ioesmlja",
+      "desc": "Zeytinyağı",
+      "amount": 36000,
+      "payer": "Efe",
+      "date": "2026-11-01T09:38:21.710Z"
     }
   ],
   "payments": [
