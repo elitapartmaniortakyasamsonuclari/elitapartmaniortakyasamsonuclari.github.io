@@ -141,6 +141,13 @@
       "to": "Yekta",
       "amount": 44803,
       "date": "2026-11-01T09:37:58.234Z"
+    },
+    {
+      "id": "mvxnkfu8zpl89",
+      "from": "Yekta",
+      "to": "Efe",
+      "amount": 9000,
+      "date": "2026-11-01T09:53:51.152Z"
     }
   ],
   "rules": [
