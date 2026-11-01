@@ -127,6 +127,13 @@
       "to": "Furkan",
       "amount": 19725,
       "date": "2026-10-31T10:00:22.252Z"
+    },
+    {
+      "id": "mvxn00kadonkv",
+      "from": "Furkan",
+      "to": "Yekta",
+      "amount": 44803,
+      "date": "2026-11-01T09:37:58.234Z"
     }
   ],
   "rules": [
