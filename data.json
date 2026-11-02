@@ -62,6 +62,13 @@
       "amount": 36000,
       "payer": "Efe",
       "date": "2026-11-01T09:38:21.710Z"
+    },
+    {
+      "id": "mvzgkdagpgaey",
+      "desc": "tuvalet kagıdı",
+      "amount": 30000,
+      "payer": "Furkan",
+      "date": "2026-11-02T16:13:22.888Z"
     }
   ],
   "payments": [
