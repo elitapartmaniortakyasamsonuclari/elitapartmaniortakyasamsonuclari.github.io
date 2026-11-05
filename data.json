@@ -69,6 +69,13 @@
       "amount": 30000,
       "payer": "Furkan",
       "date": "2026-11-02T16:13:22.888Z"
+    },
+    {
+      "id": "mw3v11q7cxtyc",
+      "desc": "kağıt havlu, çöp poşeti, bez",
+      "amount": 85000,
+      "payer": "Furkan",
+      "date": "2026-11-05T18:09:20.383Z"
     }
   ],
   "payments": [
