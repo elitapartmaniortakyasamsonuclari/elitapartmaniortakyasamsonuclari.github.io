@@ -413,7 +413,8 @@
     {
       "id": "mvc3otj9egqki",
       "name": "Mutfak &  Balkon süpürge",
-      "icon": "🧹"
+      "icon": "🧹",
+      "shift": 2
     }
   ],
   "topRuleAdded": true,
